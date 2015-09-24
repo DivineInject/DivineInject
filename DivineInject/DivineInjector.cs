@@ -13,7 +13,7 @@ namespace DivineInject
 
     public class DivineInjector
     {
-        private IDictionary<Type, Type> m_bindings = new Dictionary<Type, Type>();
+        private IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
 
         public IBindingBuilder<T> Bind<T>()
         {
@@ -22,15 +22,16 @@ namespace DivineInject
 
         public T Get<T>()
         {
-            Type implType;
-            if (!m_bindings.TryGetValue(typeof(T), out implType))
+            object impl;
+            if (!m_bindings.TryGetValue(typeof(T), out impl))
                 return default(T);
-            return (T) Activator.CreateInstance(implType);
+            return (T) impl;
         }
 
         private void AddBinding<TInterface, TImpl>()
         {
-            m_bindings.Add(typeof(TInterface), typeof(TImpl));
+            var impl = Activator.CreateInstance<TImpl>();
+            m_bindings.Add(typeof(TInterface), impl);
         }
 
         private class BindingBuilder<TInterface> : IBindingBuilder<TInterface>

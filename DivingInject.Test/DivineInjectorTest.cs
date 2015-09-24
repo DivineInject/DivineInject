@@ -18,6 +18,7 @@ namespace DivingInject.Test
         {
             DivineInjector injector;
             IOrderService instance;
+
             Scenario()
                 .Given(injector = new DivineInjector())
                 .Given(() => injector.Bind<IOrderService>().To<OrderService>())
@@ -25,6 +26,23 @@ namespace DivingInject.Test
                 .When(instance = injector.Get<IOrderService>())
 
                 .Then(instance, Is(AnInstance.OfType<OrderService>()))
+            ;
+        }
+
+        [Test]
+        public void MultipleRequestsForSameInterfaceYieldSameObject()
+        {
+            DivineInjector injector;
+            IOrderService instance1, instance2;
+
+            Scenario()
+                .Given(injector = new DivineInjector())
+                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+
+                .When(instance1 = injector.Get<IOrderService>())
+                .When(instance2 = injector.Get<IOrderService>())
+
+                .Then(instance1, Is(AnInstance.SameAs(instance2)))
             ;
         }
     }
