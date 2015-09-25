@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivineInject", "DivineInject\DivineInject.csproj", "{79F0C2AC-B84C-4B3F-82EA-964CDD28889D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivingInject.Test", "DivingInject.Test\DivingInject.Test.csproj", "{CFC291E2-CC4A-4DAB-9D13-CE17A60E9BDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivineInject.Test", "DivingInject.Test\DivineInject.Test.csproj", "{CFC291E2-CC4A-4DAB-9D13-CE17A60E9BDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

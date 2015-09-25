@@ -7,8 +7,8 @@
     <ProjectGuid>{CFC291E2-CC4A-4DAB-9D13-CE17A60E9BDA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DivingInject.Test</RootNamespace>
-    <AssemblyName>DivingInject.Test</AssemblyName>
+    <RootNamespace>DivineInject.Test</RootNamespace>
+    <AssemblyName>DivineInject.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DivineInjectorTest.cs" />
+    <Compile Include="InstantiatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

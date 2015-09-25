@@ -8,7 +8,7 @@ using TestFirst.Net.Extensions.NUnit;
 using TestFirst.Net.Matcher;
 using DivineInject;
 
-namespace DivingInject.Test
+namespace DivineInject.Test
 {
     [TestFixture]
     public class DivineInjectorTest : AbstractNUnitScenarioTest
