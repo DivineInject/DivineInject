@@ -8,11 +8,13 @@ namespace DivineInject
 {
     public interface IBindingBuilder<TInterface>
     {
-        DivineInjector To<TImpl>();
+        DivineInjector To<TImpl>()
+                where TImpl : class;
     }
 
     public class DivineInjector
     {
+        private Instantiator m_instantiator = new Instantiator();
         private IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
 
         public IBindingBuilder<T> Bind<T>()
@@ -29,8 +31,9 @@ namespace DivineInject
         }
 
         private void AddBinding<TInterface, TImpl>()
+            where TImpl : class
         {
-            var impl = Activator.CreateInstance<TImpl>();
+            var impl = m_instantiator.Create<TImpl>();
             m_bindings.Add(typeof(TInterface), impl);
         }
 
@@ -44,6 +47,7 @@ namespace DivineInject
             }
 
             public DivineInjector To<TImpl>()
+                where TImpl : class
             {
                 m_injector.AddBinding<TInterface, TImpl>();
                 return m_injector;
