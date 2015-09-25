@@ -16,12 +16,18 @@ namespace DivineInject
     {
         IBindingBuilder<T> Bind<T>();
         T Get<T>();
+        object Get(Type type);
     }
 
     class DivineInjector : IDivineInjector
     {
-        private Instantiator m_instantiator = new Instantiator();
+        private Instantiator m_instantiator;
         private IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
+
+        public DivineInjector()
+        {
+            m_instantiator = new Instantiator(this);
+        }
 
         public IBindingBuilder<T> Bind<T>()
         {
@@ -30,10 +36,15 @@ namespace DivineInject
 
         public T Get<T>()
         {
+            return (T) Get(typeof(T));
+        }
+
+        public object Get(Type type)
+        {
             object impl;
-            if (!m_bindings.TryGetValue(typeof(T), out impl))
-                return default(T);
-            return (T) impl;
+            if (!m_bindings.TryGetValue(type, out impl))
+                return Activator.CreateInstance(type);
+            return impl;
         }
 
         private void AddBinding<TInterface, TImpl>()
