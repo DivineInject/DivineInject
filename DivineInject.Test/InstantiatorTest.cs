@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.NUnit;
+using TestFirst.Net.Matcher;
 using DivineInject;
 
 namespace DivineInject.Test
@@ -13,14 +14,22 @@ namespace DivineInject.Test
     public class InstantiatorTest : AbstractNUnitScenarioTest
     {
         [Test]
-        [Ignore("wip")]
         public void InstantiatesUsingNoArgConstructor()
         {
             Instantiator instantiator;
+            object instance;
 
             Scenario()
                 .Given(instantiator = new Instantiator())
+
+                .When(instance = instantiator.Create<TestClassWithNoArgConstructor>())
+
+                .Then((TestClassWithNoArgConstructor) instance, Is(AnInstance.NotNull<TestClassWithNoArgConstructor>()))
             ;
         }
+    }
+
+    public class TestClassWithNoArgConstructor
+    {
     }
 }

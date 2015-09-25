@@ -8,5 +8,10 @@ namespace DivineInject
 {
     internal class Instantiator
     {
+        public T Create<T>()
+            where T : class
+        {
+            return Activator.CreateInstance<T>();
+        }
     }
 }
