@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using TestFirst.Net.Extensions.NUnit;
+using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 using DivineInject;
 
 namespace DivineInject.Test
 {
     [TestFixture]
-    public class InstantiatorTest : AbstractNUnitScenarioTest
+    public class InstantiatorTest : AbstractNUnitMoqScenarioTest
     {
         [Test]
         public void InstantiatesUsingNoArgConstructor()
