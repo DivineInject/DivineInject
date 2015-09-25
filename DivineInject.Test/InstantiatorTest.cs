@@ -13,6 +13,7 @@ namespace DivineInject.Test
     public class InstantiatorTest : AbstractNUnitScenarioTest
     {
         [Test]
+        [Ignore("wip")]
         public void InstantiatesUsingNoArgConstructor()
         {
             Instantiator instantiator;
