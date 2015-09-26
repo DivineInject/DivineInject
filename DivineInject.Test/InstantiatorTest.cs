@@ -98,6 +98,30 @@ namespace DivineInject.Test
                 .Then(instance.Dependency, Is(AnInstance.SameAs(dependency)))
             ;
         }
+
+        [Test]
+        public void CreateThrowsExceptionInCaseNoInjectableConstructorsFound()
+        {
+            Instantiator instantiator;
+            ITestDependency dependency;
+            IDivineInjector injector;
+            Exception exception;
+
+            Scenario()
+                .Given(dependency = AMock<ITestDependency>().Instance)
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(ITestSecondDependency))).Returns(false)
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
+                .Given(instantiator = new Instantiator(injector))
+
+                .When(exception = CaughtException(() => instantiator.Create<TestClassThatCannotBeInjected>()))
+
+                .Then(exception, 
+                    Is(AnException.Of().Type<BindingException>()
+                        .Message("Cannot create DivineInject.Test.TestClassThatCannotBeInjected, could not find an injectable constructor because the following types are not injectable: System.String, DivineInject.Test.ITestSecondDependency")))
+            ;
+        }
     }
 
     public interface ITestDependency
@@ -148,5 +172,16 @@ namespace DivineInject.Test
         }
 
         public ITestDependency Dependency { get; private set; }
+    }
+
+    public class TestClassThatCannotBeInjected
+    {
+        public TestClassThatCannotBeInjected(string name)
+        {
+        }
+
+        public TestClassThatCannotBeInjected(ITestSecondDependency dependency)
+        {
+        }
     }
 }

@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingException.cs" />
     <Compile Include="DivineInjector.cs" />
     <Compile Include="Instantiator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
