@@ -42,6 +42,7 @@
     <Compile Include="BindingException.cs" />
     <Compile Include="ClassGenerator.cs" />
     <Compile Include="DivineInjector.cs" />
+    <Compile Include="GeneratedProperty.cs" />
     <Compile Include="Instantiator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
