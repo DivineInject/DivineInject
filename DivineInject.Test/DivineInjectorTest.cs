@@ -45,6 +45,20 @@ namespace DivineInject.Test
                 .Then(instance1, Is(AnInstance.SameAs(instance2)))
             ;
         }
+
+        [Test]
+        public void IsBoundReturnsWhetherABindingExistsForAType()
+        {
+            DivineInjector injector;
+
+            Scenario()
+                .Given(injector = new DivineInjector())
+                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+
+                .Then(injector.IsBound(typeof(IOrderService)), IsTrue())
+                .Then(injector.IsBound(typeof(string)), IsFalse())
+            ;
+        }
     }
 
     public interface IOrderService

@@ -47,6 +47,11 @@ namespace DivineInject
             return impl;
         }
 
+        public bool IsBound(Type type)
+        {
+            return m_bindings.ContainsKey(type);
+        }
+
         private void AddBinding<TInterface, TImpl>()
             where TImpl : class
         {
