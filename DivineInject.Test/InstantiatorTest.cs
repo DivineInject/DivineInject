@@ -71,6 +71,29 @@ namespace DivineInject.Test
                 .Then(instance.Dependency, Is(AnInstance.SameAs(dependency)))
             ;
         }
+
+        [Test]
+        [Ignore("wip")]
+        public void CreatesInstanceUsingFirstConstructorThatCanBeInjected()
+        {
+            Instantiator instantiator;
+            TestClassWithAnUninjectableConstructor instance;
+            ITestDependency dependency;
+            IDivineInjector injector;
+
+            Scenario()
+                .Given(dependency = AMock<ITestDependency>().Instance)
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(ITestDependency))).Returns(dependency)
+                    .Instance)
+                .Given(instantiator = new Instantiator(injector))
+
+                .When(instance = instantiator.Create<TestClassWithAnUninjectableConstructor>())
+
+                .Then(instance, Is(AnInstance.NotNull<TestClassWithAnUninjectableConstructor>()))
+                .Then(instance.Dependency, Is(AnInstance.SameAs(dependency)))
+            ;
+        }
     }
 
     public interface ITestDependency
@@ -107,5 +130,19 @@ namespace DivineInject.Test
 
         public ITestDependency Dependency { get; private set; }
         public ITestSecondDependency SecondDependency { get; private set; }
+    }
+
+    public class TestClassWithAnUninjectableConstructor
+    {
+        public TestClassWithAnUninjectableConstructor(string name)
+        {
+        }
+
+        public TestClassWithAnUninjectableConstructor(ITestDependency dependency)
+        {
+            Dependency = dependency;
+        }
+
+        public ITestDependency Dependency { get; private set; }
     }
 }
