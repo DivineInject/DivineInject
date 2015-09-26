@@ -52,6 +52,7 @@ namespace DivineInject.Test
                     APropertyInfo.With().Name("Age").PropertyType(typeof(int))
                 )))
                 .Then(dynamicInstance.Name, Is(AString.EqualTo("Bob")))
+                .Then(dynamicInstance.Age, Is(AnInt.EqualTo(42)))
             ;
         }
     }

@@ -50,13 +50,13 @@ namespace DivineInject
             il.Emit(OpCodes.Nop);
             il.Emit(OpCodes.Nop);
 
-            if (properties.Any())
+            for (var i = 0; i < properties.Count; i++)
             {
-                var property = properties.First();
-                var setter = setters.First();
+                var property = properties[i];
+                var setter = setters[i];
 
                 il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldarg_1);
+                il.Emit(OpCodes.Ldarg, i+1);
                 il.Emit(OpCodes.Call, setter);
                 il.Emit(OpCodes.Nop);
             }
