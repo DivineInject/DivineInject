@@ -39,6 +39,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(dependency = AMock<ITestDependency>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(ITestDependency))).Returns(true)
                     .WhereMethod(i => i.Get(typeof(ITestDependency))).Returns(dependency)
                     .Instance)
                 .Given(instantiator = new Instantiator(injector))
@@ -61,6 +62,8 @@ namespace DivineInject.Test
             Scenario()
                 .Given(dependency = AMock<ITestDependency>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(ITestDependency))).Returns(true)
+                    .WhereMethod(i => i.IsBound(typeof(ITestSecondDependency))).Returns(false)
                     .WhereMethod(i => i.Get(typeof(ITestDependency))).Returns(dependency)
                     .Instance)
                 .Given(instantiator = new Instantiator(injector))
@@ -73,7 +76,6 @@ namespace DivineInject.Test
         }
 
         [Test]
-        [Ignore("wip")]
         public void CreatesInstanceUsingFirstConstructorThatCanBeInjected()
         {
             Instantiator instantiator;
@@ -84,6 +86,8 @@ namespace DivineInject.Test
             Scenario()
                 .Given(dependency = AMock<ITestDependency>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(ITestDependency))).Returns(true)
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
                     .WhereMethod(i => i.Get(typeof(ITestDependency))).Returns(dependency)
                     .Instance)
                 .Given(instantiator = new Instantiator(injector))

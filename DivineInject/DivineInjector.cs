@@ -17,6 +17,7 @@ namespace DivineInject
         IBindingBuilder<T> Bind<T>();
         T Get<T>();
         object Get(Type type);
+        bool IsBound(Type type);
     }
 
     class DivineInjector : IDivineInjector

@@ -19,7 +19,10 @@ namespace DivineInject
             where T : class
         {
             var constructors = typeof(T).GetConstructors();
-            var cons = constructors.OrderBy(c => c.GetParameters().Count()).First();
+            var cons = constructors
+                .Where(c => c.GetParameters().All(p => m_injector.IsBound(p.ParameterType)))
+                .OrderBy(c => c.GetParameters().Count())
+                .First();
             var args = cons.GetParameters().Select(p => m_injector.Get(p.ParameterType)).ToArray();
             return (T) cons.Invoke(args);
         }
