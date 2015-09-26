@@ -18,13 +18,13 @@ namespace DivineInject
         private static object CreateNewObject(IList<GeneratedProperty> properties)
         {
             var myType = CompileResultType(properties);
-            return Activator.CreateInstance(myType);
+            return Activator.CreateInstance(myType, properties.Select(p => p.PropertyValue).ToArray());
         }
 
         public static Type CompileResultType(IList<GeneratedProperty> properties)
         {
             TypeBuilder tb = GetTypeBuilder();
-            CreateConstructor(tb);
+            CreateConstructor(tb, properties);
 
             foreach (var property in properties)
                 CreateProperty(tb, property.Name, property.PropertyType);
@@ -33,14 +33,14 @@ namespace DivineInject
             return objectType;
         }
 
-        private static void CreateConstructor(TypeBuilder tb)
+        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties)
         {
             var constructor = tb.DefineConstructor(
                 MethodAttributes.Public |
                 MethodAttributes.SpecialName |
                 MethodAttributes.RTSpecialName,
                 CallingConventions.Standard,
-                Type.EmptyTypes);
+                properties.Select(p => p.PropertyType).ToArray());
 
             var conObj = typeof(object).GetConstructor(new Type[0]);
 

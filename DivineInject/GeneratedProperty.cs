@@ -10,11 +10,13 @@ namespace DivineInject
     {
         public Type PropertyType { get; private set; }
         public string Name { get; private set; }
+        public object PropertyValue { get; private set; }
 
-        public GeneratedProperty(Type propertyType, string name)
+        public GeneratedProperty(Type propertyType, string name, object value)
         {
             PropertyType = propertyType;
             Name = name;
+            PropertyValue = value;
         }
     }
 }

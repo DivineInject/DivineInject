@@ -37,8 +37,8 @@ namespace DivineInject.Test
             GeneratedProperty property1, property2;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age"))
+                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
