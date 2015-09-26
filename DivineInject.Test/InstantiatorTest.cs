@@ -50,9 +50,33 @@ namespace DivineInject.Test
             ;
         }
 
+        [Test]
+        public void CreatesInstanceUsingConstructorWithFewestNumberOfParameters()
+        {
+            Instantiator instantiator;
+            TestClassWithTwoConstructorsWithDependencies instance;
+            ITestDependency dependency;
+            IDivineInjector injector;
+
+            Scenario()
+                .Given(dependency = AMock<ITestDependency>().Instance)
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(ITestDependency))).Returns(dependency)
+                    .Instance)
+                .Given(instantiator = new Instantiator(injector))
+
+                .When(instance = instantiator.Create<TestClassWithTwoConstructorsWithDependencies>())
+
+                .Then(instance, Is(AnInstance.NotNull<TestClassWithTwoConstructorsWithDependencies>()))
+                .Then(instance.Dependency, Is(AnInstance.SameAs(dependency)))
+            ;
+        }
     }
 
     public interface ITestDependency
+    { }
+
+    public interface ITestSecondDependency
     { }
 
     public class TestClassWithNoArgConstructor
@@ -66,5 +90,22 @@ namespace DivineInject.Test
         }
 
         public ITestDependency Dependency { get; private set; }
+    }
+
+    public class TestClassWithTwoConstructorsWithDependencies
+    {
+        public TestClassWithTwoConstructorsWithDependencies(ITestDependency dependency, ITestSecondDependency secondDependency)
+        {
+            Dependency = dependency;
+            SecondDependency = secondDependency;
+        }
+
+        public TestClassWithTwoConstructorsWithDependencies(ITestDependency dependency)
+        {
+            Dependency = dependency;
+        }
+
+        public ITestDependency Dependency { get; private set; }
+        public ITestSecondDependency SecondDependency { get; private set; }
     }
 }
