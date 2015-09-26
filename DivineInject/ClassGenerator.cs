@@ -24,13 +24,30 @@ namespace DivineInject
         public static Type CompileResultType(IList<GeneratedProperty> properties)
         {
             TypeBuilder tb = GetTypeBuilder();
-            ConstructorBuilder constructor = tb.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+            CreateConstructor(tb);
 
             foreach (var property in properties)
                 CreateProperty(tb, property.Name, property.PropertyType);
 
             Type objectType = tb.CreateType();
             return objectType;
+        }
+
+        private static void CreateConstructor(TypeBuilder tb)
+        {
+            var constructor = tb.DefineConstructor(
+                MethodAttributes.Public |
+                MethodAttributes.SpecialName |
+                MethodAttributes.RTSpecialName,
+                CallingConventions.Standard,
+                Type.EmptyTypes);
+
+            var conObj = typeof(object).GetConstructor(new Type[0]);
+
+            ILGenerator il = constructor.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Call, conObj);
+            il.Emit(OpCodes.Ret);
         }
 
         private static TypeBuilder GetTypeBuilder()
