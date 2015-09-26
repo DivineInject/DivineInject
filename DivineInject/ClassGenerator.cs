@@ -24,16 +24,16 @@ namespace DivineInject
         public static Type CompileResultType(IList<GeneratedProperty> properties)
         {
             TypeBuilder tb = GetTypeBuilder();
-            CreateConstructor(tb, properties);
 
-            foreach (var property in properties)
-                CreateProperty(tb, property.Name, property.PropertyType);
+            var setters = properties.Select(property => CreateProperty(tb, property.Name, property.PropertyType)).ToList();
+
+            CreateConstructor(tb, properties, setters);
 
             Type objectType = tb.CreateType();
             return objectType;
         }
 
-        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties)
+        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties, IList<MethodBuilder> setters)
         {
             var constructor = tb.DefineConstructor(
                 MethodAttributes.Public |
@@ -47,6 +47,21 @@ namespace DivineInject
             ILGenerator il = constructor.GetILGenerator();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Call, conObj);
+            il.Emit(OpCodes.Nop);
+            il.Emit(OpCodes.Nop);
+
+            if (properties.Any())
+            {
+                var property = properties.First();
+                var setter = setters.First();
+
+                il.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Ldarg_1);
+                il.Emit(OpCodes.Call, setter);
+                il.Emit(OpCodes.Nop);
+            }
+
+            il.Emit(OpCodes.Nop);
             il.Emit(OpCodes.Ret);
         }
 
@@ -67,7 +82,7 @@ namespace DivineInject
             return tb;
         }
 
-        private static void CreateProperty(TypeBuilder tb, string propertyName, Type propertyType)
+        private static MethodBuilder CreateProperty(TypeBuilder tb, string propertyName, Type propertyType)
         {
             FieldBuilder fieldBuilder = tb.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
 
@@ -101,6 +116,8 @@ namespace DivineInject
 
             propertyBuilder.SetGetMethod(getPropMthdBldr);
             propertyBuilder.SetSetMethod(setPropMthdBldr);
+
+            return setPropMthdBldr;
         }
     }
 }

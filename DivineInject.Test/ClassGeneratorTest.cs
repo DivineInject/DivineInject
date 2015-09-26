@@ -35,6 +35,7 @@ namespace DivineInject.Test
             ClassGenerator generator;
             object instance;
             GeneratedProperty property1, property2;
+            dynamic dynamicInstance;
 
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
@@ -43,12 +44,14 @@ namespace DivineInject.Test
                 .Given(generator = new ClassGenerator())
 
                 .When(instance = generator.Generate(new[] { property1, property2 }))
+                .When(dynamicInstance = instance)
 
                 .Then(instance, Is(AnInstance.NotNull()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
                     APropertyInfo.With().Name("Name").PropertyType(typeof(string)),
                     APropertyInfo.With().Name("Age").PropertyType(typeof(int))
                 )))
+                .Then(dynamicInstance.Name, Is(AString.EqualTo("Bob")))
             ;
         }
     }
