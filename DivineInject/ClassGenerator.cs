@@ -10,27 +10,55 @@ namespace DivineInject
 {
     class ClassGenerator
     {
-        public object Generate(IList<GeneratedProperty> properties)
+        public object Generate<TInterface, TImpl>(IList<GeneratedProperty> properties)
         {
-            return CreateNewObject(properties);
+            return CreateNewObject(properties, typeof(TInterface), typeof(TImpl));
         }
 
-        private static object CreateNewObject(IList<GeneratedProperty> properties)
+        private static object CreateNewObject(IList<GeneratedProperty> properties, Type interfaceType, Type implType)
         {
-            var myType = CompileResultType(properties);
+            var myType = CompileResultType(properties, interfaceType, implType);
             return Activator.CreateInstance(myType, properties.Select(p => p.PropertyValue).ToArray());
         }
 
-        public static Type CompileResultType(IList<GeneratedProperty> properties)
+        public static Type CompileResultType(IList<GeneratedProperty> properties, Type interfaceType, Type implType)
         {
-            TypeBuilder tb = GetTypeBuilder();
+            TypeBuilder tb = GetTypeBuilder(interfaceType);
 
             var setters = properties.Select(property => CreateProperty(tb, property.Name, property.PropertyType)).ToList();
 
             CreateConstructor(tb, properties, setters);
 
+            foreach (var method in interfaceType.GetMethods())
+                CreateMethod(tb, method, implType);
+
             Type objectType = tb.CreateType();
             return objectType;
+        }
+
+        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType)
+        {
+            var method = tb.DefineMethod(methodInfo.Name,
+                MethodAttributes.Public |
+                MethodAttributes.HideBySig |
+                MethodAttributes.NewSlot |
+                MethodAttributes.Virtual |
+                MethodAttributes.Final,
+                CallingConventions.Standard,
+                methodInfo.ReturnType,
+                new Type[0]
+                );
+
+            var conObj = implType.GetConstructor(new Type[0]);
+
+            ILGenerator il = method.GetILGenerator();
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Call, conObj);
+            il.Emit(OpCodes.Nop);
+            il.Emit(OpCodes.Nop);
+
+            il.Emit(OpCodes.Nop);
+            il.Emit(OpCodes.Ret);
         }
 
         private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties, IList<MethodBuilder> setters)
@@ -65,7 +93,7 @@ namespace DivineInject
             il.Emit(OpCodes.Ret);
         }
 
-        private static TypeBuilder GetTypeBuilder()
+        private static TypeBuilder GetTypeBuilder(Type interfaceType)
         {
             var typeSignature = "MyDynamicType";
             var an = new AssemblyName(typeSignature);
@@ -79,6 +107,7 @@ namespace DivineInject
                                 TypeAttributes.BeforeFieldInit |
                                 TypeAttributes.AutoLayout
                                 , null);
+            tb.AddInterfaceImplementation(interfaceType);
             return tb;
         }
 

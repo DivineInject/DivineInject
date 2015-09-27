@@ -23,7 +23,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate(new List<GeneratedProperty>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(new List<GeneratedProperty>()))
 
                 .Then(instance, Is(AnInstance.NotNull()))
             ;
@@ -33,9 +33,8 @@ namespace DivineInject.Test
         public void GeneratesClassWithProperties()
         {
             ClassGenerator generator;
-            object instance;
             GeneratedProperty property1, property2;
-            dynamic dynamicInstance;
+            dynamic instance;
 
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
@@ -43,18 +42,57 @@ namespace DivineInject.Test
 
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate(new[] { property1, property2 }))
-                .When(dynamicInstance = instance)
+                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
 
                 .Then(instance, Is(AnInstance.NotNull()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
                     APropertyInfo.With().Name("Name").PropertyType(typeof(string)),
                     APropertyInfo.With().Name("Age").PropertyType(typeof(int))
                 )))
-                .Then(dynamicInstance.Name, Is(AString.EqualTo("Bob")))
-                .Then(dynamicInstance.Age, Is(AnInt.EqualTo(42)))
+                .Then(instance.Name, Is(AString.EqualTo("Bob")))
+                .Then(instance.Age, Is(AnInt.EqualTo(42)))
             ;
         }
+
+        [Test]
+        public void GeneratesClassImplementingInterface()
+        {
+            ClassGenerator generator;
+            GeneratedProperty property1, property2;
+            dynamic instance;
+
+            Scenario()
+                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+
+                .Given(generator = new ClassGenerator())
+
+                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
+
+                .Then(instance, Is(AnInstance.NotNull<IFactory>()))
+                .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
+                    APropertyInfo.With().Name("Name").PropertyType(typeof(string)),
+                    APropertyInfo.With().Name("Age").PropertyType(typeof(int))
+                )))
+                .Then(instance.Name, Is(AString.EqualTo("Bob")))
+                .Then(instance.Age, Is(AnInt.EqualTo(42)))
+            ;
+        }
+    }
+
+    public interface IFactory
+    {
+        IDomainObject Create();
+    }
+
+    public interface IDomainObject
+    {
+
+    }
+
+    public class DomainObject
+    {
+
     }
 
     internal class APropertyInfo : PropertyMatcher<PropertyInfo>
