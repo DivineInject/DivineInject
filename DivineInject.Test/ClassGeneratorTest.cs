@@ -85,7 +85,7 @@ namespace DivineInject.Test
             ClassGenerator generator;
             GeneratedProperty property1, property2;
             IFactory factory;
-            IDomainObject obj;
+            DomainObject obj;
 
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
@@ -97,23 +97,22 @@ namespace DivineInject.Test
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.DummyMethod(), Is(AString.EqualTo("Hello")))
             ;
         }
     }
 
     public interface IFactory
     {
-        IDomainObject Create();
-    }
-
-    public interface IDomainObject
-    {
-
+        DomainObject Create();
     }
 
     public class DomainObject
     {
-
+        public string DummyMethod()
+        {
+            return "Hello";
+        }
     }
 
     internal class APropertyInfo : PropertyMatcher<PropertyInfo>
