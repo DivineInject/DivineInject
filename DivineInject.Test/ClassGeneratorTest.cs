@@ -23,7 +23,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new List<GeneratedProperty>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(new List<GeneratedProperty>(), new List<ConstructorArg>()))
 
                 .Then(instance, Is(AnInstance.NotNull()))
             ;
@@ -42,7 +42,7 @@ namespace DivineInject.Test
 
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
+                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
 
                 .Then(instance, Is(AnInstance.NotNull()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
@@ -67,7 +67,7 @@ namespace DivineInject.Test
 
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
+                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
 
                 .Then(instance, Is(AnInstance.NotNull<IFactory>()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
@@ -93,11 +93,36 @@ namespace DivineInject.Test
 
                 .Given(generator = new ClassGenerator())
 
-                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
+                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(obj.DummyMethod(), Is(AString.EqualTo("Hello")))
+            ;
+        }
+
+        [Test]
+        public void FactoryMethodOnInterfaceCreatesObjectWithConstructorArgs()
+        {
+            ClassGenerator generator;
+            GeneratedProperty property1, property2;
+            IFactory factory;
+            DomainObject obj;
+            ConstructorArg constructorArg1;
+
+            Scenario()
+                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0))
+
+                .Given(generator = new ClassGenerator())
+
+                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new[] { constructorArg1 }))
+                .When(obj = factory.Create())
+
+                .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.DummyMethod(), Is(AString.EqualTo("Hello")))
+                .Then(obj.Name, Is(AString.EqualTo("Bob")))
             ;
         }
     }
@@ -109,6 +134,17 @@ namespace DivineInject.Test
 
     public class DomainObject
     {
+        public string Name { get; private set; }
+
+        public DomainObject()
+        {
+        }
+
+        public DomainObject(string name)
+        {
+            Name = name;
+        }
+
         public string DummyMethod()
         {
             return "Hello";

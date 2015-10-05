@@ -8,18 +8,18 @@ namespace DivineInject
 {
     class ClassGenerator
     {
-        public TInterface Generate<TInterface, TImpl>(IList<GeneratedProperty> properties)
+        public TInterface Generate<TInterface, TImpl>(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs)
         {
-            return (TInterface) CreateNewObject(properties, typeof(TInterface), typeof(TImpl));
+            return (TInterface) CreateNewObject(properties, constructorArgs, typeof(TInterface), typeof(TImpl));
         }
 
-        private static object CreateNewObject(IList<GeneratedProperty> properties, Type interfaceType, Type implType)
+        private static object CreateNewObject(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
-            var myType = CompileResultType(properties, interfaceType, implType);
+            var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
             return Activator.CreateInstance(myType, properties.Select(p => p.PropertyValue).ToArray());
         }
 
-        public static Type CompileResultType(IList<GeneratedProperty> properties, Type interfaceType, Type implType)
+        public static Type CompileResultType(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
             TypeBuilder tb = GetTypeBuilder(interfaceType);
 
@@ -29,13 +29,13 @@ namespace DivineInject
             CreateConstructor(tb, properties);
 
             foreach (var method in interfaceType.GetMethods())
-                CreateMethod(tb, method, implType);
+                CreateMethod(tb, method, implType, properties, constructorArgs);
 
             Type objectType = tb.CreateType();
             return objectType;
         }
 
-        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType)
+        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs)
         {
             var method = tb.DefineMethod(methodInfo.Name,
                 MethodAttributes.Public |
@@ -48,11 +48,21 @@ namespace DivineInject
                 new Type[0]
                 );
 
-            var conObj = implType.GetConstructor(new Type[0]);
+            var conObj = implType.GetConstructor(constructorArgs.Select(c => c.ArgType).ToArray());
+
+            if (conObj == null)
+                throw new Exception("Failed to find constructor");
 
             ILGenerator il = method.GetILGenerator();
+            il.DeclareLocal(methodInfo.ReturnType);
 
-            il.Emit(OpCodes.Nop);
+            if (constructorArgs.Any())
+            {
+                il.Emit(OpCodes.Nop);
+                il.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Call, properties[0].Getter);
+            }
+
             il.Emit(OpCodes.Newobj, conObj);
             
             il.Emit(OpCodes.Nop);
