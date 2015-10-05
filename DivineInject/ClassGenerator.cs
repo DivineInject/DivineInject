@@ -23,9 +23,10 @@ namespace DivineInject
         {
             TypeBuilder tb = GetTypeBuilder(interfaceType);
 
-            var setters = properties.Select(property => CreateProperty(tb, property.Name, property.PropertyType)).ToList();
+            foreach (var property in properties)
+                CreateProperty(tb, property);
 
-            CreateConstructor(tb, properties, setters);
+            CreateConstructor(tb, properties);
 
             foreach (var method in interfaceType.GetMethods())
                 CreateMethod(tb, method, implType);
@@ -58,7 +59,7 @@ namespace DivineInject
             il.Emit(OpCodes.Ret);
         }
 
-        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties, IList<MethodBuilder> setters)
+        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties)
         {
             var constructor = tb.DefineConstructor(
                 MethodAttributes.Public |
@@ -78,11 +79,10 @@ namespace DivineInject
             for (var i = 0; i < properties.Count; i++)
             {
                 var property = properties[i];
-                var setter = setters[i];
 
                 il.Emit(OpCodes.Ldarg_0);
                 il.Emit(OpCodes.Ldarg, i+1);
-                il.Emit(OpCodes.Call, setter);
+                il.Emit(OpCodes.Call, property.Setter);
                 il.Emit(OpCodes.Nop);
             }
 
@@ -108,12 +108,13 @@ namespace DivineInject
             return tb;
         }
 
-        private static MethodBuilder CreateProperty(TypeBuilder tb, string propertyName, Type propertyType)
+        private static void CreateProperty(TypeBuilder tb, GeneratedProperty property)
         {
-            FieldBuilder fieldBuilder = tb.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+            FieldBuilder fieldBuilder = tb.DefineField("_" + property.Name, property.PropertyType, FieldAttributes.Private);
 
-            PropertyBuilder propertyBuilder = tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
-            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
+            PropertyBuilder propertyBuilder = tb.DefineProperty(property.Name, PropertyAttributes.HasDefault, property.PropertyType, null);
+            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + property.Name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, 
+                property.PropertyType, Type.EmptyTypes);
             ILGenerator getIl = getPropMthdBldr.GetILGenerator();
 
             getIl.Emit(OpCodes.Ldarg_0);
@@ -121,11 +122,11 @@ namespace DivineInject
             getIl.Emit(OpCodes.Ret);
 
             MethodBuilder setPropMthdBldr =
-                tb.DefineMethod("set_" + propertyName,
+                tb.DefineMethod("set_" + property.Name,
                   MethodAttributes.Private |
                   MethodAttributes.SpecialName |
                   MethodAttributes.HideBySig,
-                  null, new[] { propertyType });
+                  null, new[] { property.PropertyType });
 
             ILGenerator setIl = setPropMthdBldr.GetILGenerator();
             Label modifyProperty = setIl.DefineLabel();
@@ -143,7 +144,8 @@ namespace DivineInject
             propertyBuilder.SetGetMethod(getPropMthdBldr);
             propertyBuilder.SetSetMethod(setPropMthdBldr);
 
-            return setPropMthdBldr;
+            property.Getter = getPropMthdBldr;
+            property.Setter = setPropMthdBldr;
         }
     }
 }
