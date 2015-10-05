@@ -113,13 +113,13 @@ namespace DivineInject.Test
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
-                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0))
-                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1))
+                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
+                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
 
                 .Given(generator = new ClassGenerator())
 
                 .When(factory = generator.Generate<IFactory, DomainObject>(
-                    new[] { property1, property2 }, 
+                    new[] { property1, property2 },
                     new[] { constructorArg1, constructorArg2 }))
                 .When(obj = factory.Create())
 
@@ -129,6 +129,37 @@ namespace DivineInject.Test
                 .Then(obj.Age, Is(AnInt.EqualTo(42)))
             ;
         }
+
+        [Test]
+        public void FactoryMethodOnInterfaceCreatesObjectWithConstructorArgsFromFactoryWithArgs()
+        {
+            ClassGenerator generator;
+            GeneratedProperty property1, property2;
+            IFactoryWithArg factory;
+            IDomainObject obj;
+            ConstructorArg constructorArg1, constructorArg2, constructorArg3;
+
+            Scenario()
+                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
+                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
+                .Given(constructorArg3 = new ConstructorArg(typeof(string), null, 0))
+
+                .Given(generator = new ClassGenerator())
+
+                .When(factory = generator.Generate<IFactoryWithArg, DomainObject>(
+                    new[] { property1, property2 },
+                    new[] { constructorArg1, constructorArg2, constructorArg3 }))
+                .When(obj = factory.Create("developer"))
+
+                .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.DummyMethod(), Is(AString.EqualTo("Hello")))
+                .Then(obj.Name, Is(AString.EqualTo("Bob")))
+                .Then(obj.Age, Is(AnInt.EqualTo(42)))
+                .Then(obj.Role, Is(AString.EqualTo("developer")))
+            ;
+        }
     }
 
     public interface IFactory
@@ -136,10 +167,16 @@ namespace DivineInject.Test
         IDomainObject Create();
     }
 
+    public interface IFactoryWithArg
+    {
+        IDomainObject Create(string role);
+    }
+
     public interface IDomainObject
     {
         string Name { get; }
         int Age { get; }
+        string Role { get; }
         string DummyMethod();
     }
 
@@ -147,6 +184,7 @@ namespace DivineInject.Test
     {
         public string Name { get; private set; }
         public int Age { get; private set; }
+        public string Role { get; private set; }
 
         public DomainObject()
         {
@@ -156,6 +194,13 @@ namespace DivineInject.Test
         {
             Name = name;
             Age = age;
+        }
+
+        public DomainObject(string name, int age, string role)
+        {
+            Name = name;
+            Age = age;
+            Role = role;
         }
 
         public string DummyMethod()

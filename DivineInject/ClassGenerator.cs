@@ -45,13 +45,15 @@ namespace DivineInject
                 MethodAttributes.Final,
                 CallingConventions.Standard,
                 methodInfo.ReturnType,
-                new Type[0]
+                constructorArgs.Where(c => c.ParameterIndex.HasValue).Select(c => c.ArgType).ToArray()
                 );
 
-            var conObj = implType.GetConstructor(constructorArgs.Select(c => c.ArgType).ToArray());
+            var consArgs = constructorArgs.Select(c => c.ArgType).ToArray();
+
+            var conObj = implType.GetConstructor(consArgs);
 
             if (conObj == null)
-                throw new Exception("Failed to find constructor");
+                throw new Exception("Failed to find constructor of type " + implType.FullName + " with arguments: " + string.Join(", ", consArgs.Select(a => a.FullName)));
 
             ILGenerator il = method.GetILGenerator();
             il.DeclareLocal(implType);
@@ -59,8 +61,15 @@ namespace DivineInject
             il.Emit(OpCodes.Nop);
             foreach (var arg in constructorArgs)
             {
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Call, properties[arg.PropertyIndex].Getter);
+                if (arg.PropertyIndex.HasValue)
+                {
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, properties[arg.PropertyIndex.Value].Getter);
+                }
+                else
+                {
+                    il.Emit(OpCodes.Ldarg, arg.ParameterIndex.Value + 1);
+                }
             }
 
             il.Emit(OpCodes.Newobj, conObj);
