@@ -54,7 +54,7 @@ namespace DivineInject
                 throw new Exception("Failed to find constructor");
 
             ILGenerator il = method.GetILGenerator();
-            il.DeclareLocal(methodInfo.ReturnType);
+            il.DeclareLocal(implType);
 
             il.Emit(OpCodes.Nop);
             foreach (var arg in constructorArgs)

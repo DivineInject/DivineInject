@@ -85,7 +85,7 @@ namespace DivineInject.Test
             ClassGenerator generator;
             GeneratedProperty property1, property2;
             IFactory factory;
-            DomainObject obj;
+            IDomainObject obj;
 
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
@@ -107,7 +107,7 @@ namespace DivineInject.Test
             ClassGenerator generator;
             GeneratedProperty property1, property2;
             IFactory factory;
-            DomainObject obj;
+            IDomainObject obj;
             ConstructorArg constructorArg1, constructorArg2;
 
             Scenario()
@@ -133,10 +133,17 @@ namespace DivineInject.Test
 
     public interface IFactory
     {
-        DomainObject Create();
+        IDomainObject Create();
     }
 
-    public class DomainObject
+    public interface IDomainObject
+    {
+        string Name { get; }
+        int Age { get; }
+        string DummyMethod();
+    }
+
+    public class DomainObject : IDomainObject
     {
         public string Name { get; private set; }
         public int Age { get; private set; }
