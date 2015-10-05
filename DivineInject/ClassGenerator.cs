@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -10,9 +8,9 @@ namespace DivineInject
 {
     class ClassGenerator
     {
-        public object Generate<TInterface, TImpl>(IList<GeneratedProperty> properties)
+        public TInterface Generate<TInterface, TImpl>(IList<GeneratedProperty> properties)
         {
-            return CreateNewObject(properties, typeof(TInterface), typeof(TImpl));
+            return (TInterface) CreateNewObject(properties, typeof(TInterface), typeof(TImpl));
         }
 
         private static object CreateNewObject(IList<GeneratedProperty> properties, Type interfaceType, Type implType)
@@ -52,11 +50,10 @@ namespace DivineInject
             var conObj = implType.GetConstructor(new Type[0]);
 
             ILGenerator il = method.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Call, conObj);
-            il.Emit(OpCodes.Nop);
-            il.Emit(OpCodes.Nop);
 
+            il.Emit(OpCodes.Nop);
+            il.Emit(OpCodes.Newobj, conObj);
+            
             il.Emit(OpCodes.Nop);
             il.Emit(OpCodes.Ret);
         }

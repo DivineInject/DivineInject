@@ -78,6 +78,27 @@ namespace DivineInject.Test
                 .Then(instance.Age, Is(AnInt.EqualTo(42)))
             ;
         }
+
+        [Test]
+        public void FactoryMethodOnInterfaceCreatesObjectWithoutConstructorArgs()
+        {
+            ClassGenerator generator;
+            GeneratedProperty property1, property2;
+            IFactory factory;
+            IDomainObject obj;
+
+            Scenario()
+                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+
+                .Given(generator = new ClassGenerator())
+
+                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }))
+                .When(obj = factory.Create())
+
+                .Then(obj, Is(AnInstance.NotNull()))
+            ;
+        }
     }
 
     public interface IFactory
