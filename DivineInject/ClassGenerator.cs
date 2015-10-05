@@ -56,11 +56,11 @@ namespace DivineInject
             ILGenerator il = method.GetILGenerator();
             il.DeclareLocal(methodInfo.ReturnType);
 
-            if (constructorArgs.Any())
+            il.Emit(OpCodes.Nop);
+            foreach (var arg in constructorArgs)
             {
-                il.Emit(OpCodes.Nop);
                 il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Call, properties[0].Getter);
+                il.Emit(OpCodes.Call, properties[arg.PropertyIndex].Getter);
             }
 
             il.Emit(OpCodes.Newobj, conObj);

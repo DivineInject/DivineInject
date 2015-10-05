@@ -108,21 +108,25 @@ namespace DivineInject.Test
             GeneratedProperty property1, property2;
             IFactory factory;
             DomainObject obj;
-            ConstructorArg constructorArg1;
+            ConstructorArg constructorArg1, constructorArg2;
 
             Scenario()
                 .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0))
+                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1))
 
                 .Given(generator = new ClassGenerator())
 
-                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new[] { constructorArg1 }))
+                .When(factory = generator.Generate<IFactory, DomainObject>(
+                    new[] { property1, property2 }, 
+                    new[] { constructorArg1, constructorArg2 }))
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(obj.DummyMethod(), Is(AString.EqualTo("Hello")))
                 .Then(obj.Name, Is(AString.EqualTo("Bob")))
+                .Then(obj.Age, Is(AnInt.EqualTo(42)))
             ;
         }
     }
@@ -135,14 +139,16 @@ namespace DivineInject.Test
     public class DomainObject
     {
         public string Name { get; private set; }
+        public int Age { get; private set; }
 
         public DomainObject()
         {
         }
 
-        public DomainObject(string name)
+        public DomainObject(string name, int age)
         {
             Name = name;
+            Age = age;
         }
 
         public string DummyMethod()
