@@ -82,6 +82,33 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
             ;
         }
+
+        [Test]
+        public void CreatesFactoryMethodForMethodWithOneArgAndAnInjectableDependency()
+        {
+            FactoryMethodFactory factoryMethodFactory;
+            MethodInfo methodInfo;
+            IDivineInjector injector;
+            FactoryMethod factoryMethod;
+            Type domainObjectType;
+            ConstructorInfo expectedConstructor;
+
+            Scenario()
+                .Given(factoryMethodFactory = new FactoryMethodFactory())
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithDependencyAndArg"))
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
+                    .Instance)
+                .Given(domainObjectType = typeof(DomainObjectWithDependencyAndArg))
+                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase), typeof(string) }))
+
+                .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
+
+                .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+            ;
+        }
     }
 
     internal interface IDatabase
@@ -93,6 +120,7 @@ namespace DivineInject.Test
         string MethodWithNoArgs();
         DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
         DomainObjectWithOneDependency MethodWithSingleDependency();
+        DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
     }
 
     internal class DomainObjectWithDefaultConstructor
@@ -115,6 +143,13 @@ namespace DivineInject.Test
     internal class DomainObjectWithOneDependency
     {
         public DomainObjectWithOneDependency(IDatabase database)
+        {
+        }
+    }
+
+    internal class DomainObjectWithDependencyAndArg
+    {
+        public DomainObjectWithDependencyAndArg(IDatabase database, string name)
         {
         }
     }
