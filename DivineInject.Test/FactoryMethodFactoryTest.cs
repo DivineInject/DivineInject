@@ -44,7 +44,9 @@ namespace DivineInject.Test
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
                 .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithSinglePassedArg"))
-                .Given(injector = AMock<IDivineInjector>().Instance)
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithSingleArgConstructor))
                 .Given(expectedConstructor = domainObjectType.GetConstructor(new []{typeof(string)}))
 
@@ -54,12 +56,43 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
             ;
         }
+
+        [Test]
+        public void CreatesFactoryMethodForMethodWithAnInjectableDependency()
+        {
+            FactoryMethodFactory factoryMethodFactory;
+            MethodInfo methodInfo;
+            IDivineInjector injector;
+            FactoryMethod factoryMethod;
+            Type domainObjectType;
+            ConstructorInfo expectedConstructor;
+
+            Scenario()
+                .Given(factoryMethodFactory = new FactoryMethodFactory())
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithSingleDependency"))
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
+                    .Instance)
+                .Given(domainObjectType = typeof(DomainObjectWithOneDependency))
+                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase) }))
+
+                .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
+
+                .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+            ;
+        }
+    }
+
+    internal interface IDatabase
+    {
     }
 
     internal interface IDummyFactory
     {
         string MethodWithNoArgs();
         DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
+        DomainObjectWithOneDependency MethodWithSingleDependency();
     }
 
     internal class DomainObjectWithDefaultConstructor
@@ -76,6 +109,13 @@ namespace DivineInject.Test
         public DomainObjectWithSingleArgConstructor(string name)
         {
             
+        }
+    }
+
+    internal class DomainObjectWithOneDependency
+    {
+        public DomainObjectWithOneDependency(IDatabase database)
+        {
         }
     }
 }

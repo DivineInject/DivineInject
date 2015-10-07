@@ -11,17 +11,23 @@ namespace DivineInject
         {
             var methodArgs = method.GetParameters();
             var constructors = domainObjectType.GetConstructors()
-                .Where(cons => ConstructorHasAllMethodArgs(cons, methodArgs));
+                .Where(cons => ConstructorCanBeCalled(cons, methodArgs, injector));
             var constructor = constructors.Single();
 
             return new FactoryMethod(constructor, new GeneratedProperty[0]);
         }
 
-        private bool ConstructorHasAllMethodArgs(ConstructorInfo cons, ParameterInfo[] methodArgs)
+        private bool ConstructorCanBeCalled(ConstructorInfo cons, ParameterInfo[] methodArgs, IDivineInjector injector)
         {
-            var consArgs = cons.GetParameters();
+            var constructorParams = cons.GetParameters()
+                .Where(param => !injector.IsBound(param.ParameterType))
+                .ToArray();
+            return ConstructorHasAllMethodArgs(methodArgs, constructorParams);
+        }
 
-            var consArgTypes = consArgs.Select(a => a.ParameterType).ToList();
+        private bool ConstructorHasAllMethodArgs(ParameterInfo[] methodArgs, ParameterInfo[] constructorParams)
+        {
+            var consArgTypes = constructorParams.Select(a => a.ParameterType).ToList();
             var methodArgTypes = methodArgs.Select(a => a.ParameterType).ToList();
 
             return !consArgTypes.Except(methodArgTypes).Any() &&
