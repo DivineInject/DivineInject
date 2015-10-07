@@ -43,6 +43,8 @@
     <Compile Include="ClassGenerator.cs" />
     <Compile Include="ConstructorArg.cs" />
     <Compile Include="DivineInjector.cs" />
+    <Compile Include="FactoryMethod.cs" />
+    <Compile Include="FactoryMethodFactory.cs" />
     <Compile Include="GeneratedProperty.cs" />
     <Compile Include="Instantiator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

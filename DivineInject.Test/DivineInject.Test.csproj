@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
+    <Compile Include="FactoryMethodFactoryTest.cs" />
     <Compile Include="InstantiatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
