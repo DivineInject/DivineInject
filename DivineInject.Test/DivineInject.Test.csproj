@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AGeneratedProperty.cs" />
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
     <Compile Include="FactoryMethodFactoryTest.cs" />

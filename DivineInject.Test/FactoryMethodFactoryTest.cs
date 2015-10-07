@@ -66,12 +66,15 @@ namespace DivineInject.Test
             FactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
+            IDatabase database;
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
                 .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithSingleDependency"))
+                .Given(database = AMock<IDatabase>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
                     .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
+                    .WhereMethod(i => i.Get(typeof(IDatabase))).Returns(database)
                     .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithOneDependency))
                 .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase) }))
@@ -79,7 +82,12 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
+                    AGeneratedProperty.With()
+                        .Name("Database")
+                        .PropertyType(typeof(IDatabase))
+                        .PropertyValue(database)
+                )))
             ;
         }
 
@@ -92,13 +100,16 @@ namespace DivineInject.Test
             FactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
+            IDatabase database;
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
                 .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithDependencyAndArg"))
+                .Given(database = AMock<IDatabase>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
                     .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
                     .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
+                    .WhereMethod(i => i.Get(typeof(IDatabase))).Returns(database)
                     .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithDependencyAndArg))
                 .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase), typeof(string) }))
@@ -106,12 +117,40 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
+                    AGeneratedProperty.With()
+                        .Name("Database")
+                        .PropertyType(typeof(IDatabase))
+                        .PropertyValue(database)
+                )))
+            ;
+        }
+
+        [Test]
+        public void CreateThrowsExceptionInCaseNoSuitableConstructorFound()
+        {
+            FactoryMethodFactory factoryMethodFactory;
+            MethodInfo methodInfo;
+            IDivineInjector injector;
+            Type domainObjectType;
+            Exception exception;
+
+            Scenario()
+                .Given(factoryMethodFactory = new FactoryMethodFactory())
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithSingleDependency"))
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(false)
+                    .Instance)
+                .Given(domainObjectType = typeof(DomainObjectWithOneDependency))
+
+                .When(exception = CaughtException(() => factoryMethodFactory.Create(methodInfo, injector, domainObjectType)))
+
+                .Then(exception, Is(AnException.With().Message("Could not find constructor on DomainObjectWithOneDependency for factory method IDummyFactory.MethodWithSingleDependency")))
             ;
         }
     }
 
-    internal interface IDatabase
+    public interface IDatabase
     {
     }
 
