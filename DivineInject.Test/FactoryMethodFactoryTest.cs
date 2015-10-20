@@ -30,7 +30,7 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
-                .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArg>()))
+                .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArgDefinition>()))
             ;
         }
 
@@ -59,7 +59,7 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
-                    APassedConstructorArg.With().Type(typeof(string))
+                    APassedConstructorArgDefinition.With().Type(typeof(string))
                 )))
             ;
         }
@@ -89,7 +89,7 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSingleDependency")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
-                    AnInjectableConstructorArg.With().Name("Database").PropertyType(typeof(IDatabase))
+                    AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase))
                 )))
             ;
         }
@@ -119,9 +119,9 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndArg))))
-                .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArg>().With(
-                    AnInjectableConstructorArg.With().Name("Database").PropertyType(typeof(IDatabase)),
-                    APassedConstructorArg.With().Type(typeof(string))
+                .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
+                    AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)),
+                    APassedConstructorArgDefinition.With().Type(typeof(string))
                 )))
             ;
         }

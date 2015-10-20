@@ -31,11 +31,11 @@ namespace DivineInject
             return new FactoryMethod(constructor, method.Name, method.ReturnType, consArgs);
         }
 
-        private IConstructorArg ToConstructorArg(ParameterInfo param, IDivineInjector injector)
+        private IConstructorArgDefinition ToConstructorArg(ParameterInfo param, IDivineInjector injector)
         {
             if (injector.IsBound(param.ParameterType))
-                return new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name));
-            return new PassedConstructorArg(param.ParameterType);
+                return new InjectableConstructorArgDefinition(param.ParameterType, GetPropertyName(param.Name));
+            return new PassedConstructorArgDefinition(param.ParameterType);
         }
 
         private string GetPropertyName(string name)

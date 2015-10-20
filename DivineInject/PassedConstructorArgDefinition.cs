@@ -2,9 +2,9 @@
 
 namespace DivineInject
 {
-    class PassedConstructorArg : IConstructorArg
+    class PassedConstructorArgDefinition : IConstructorArgDefinition
     {
-        public PassedConstructorArg(Type parameterType)
+        public PassedConstructorArgDefinition(Type parameterType)
         {
             ParameterType = parameterType;
         }

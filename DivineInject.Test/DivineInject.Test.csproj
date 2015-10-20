@@ -54,8 +54,8 @@
   <ItemGroup>
     <Compile Include="AMethodInfo.cs" />
     <Compile Include="AMixedList.cs" />
-    <Compile Include="AnInjectableConstructorArg.cs" />
-    <Compile Include="APassedConstructorArg.cs" />
+    <Compile Include="AnInjectableConstructorArgDefinition.cs" />
+    <Compile Include="APassedConstructorArgDefinition.cs" />
     <Compile Include="AType.cs" />
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
