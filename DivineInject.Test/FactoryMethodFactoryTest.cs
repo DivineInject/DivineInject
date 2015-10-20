@@ -58,6 +58,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedProperty>()))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
             ;
         }
 
@@ -88,6 +90,8 @@ namespace DivineInject.Test
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                 )))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSingleDependency")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
             ;
         }
 
@@ -119,6 +123,8 @@ namespace DivineInject.Test
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                 )))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndArg")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndArg))))
             ;
         }
 
