@@ -22,12 +22,11 @@ namespace DivineInject
             return Activator.CreateInstance(myType, propertyValues);
         }
 
-        public static Type CompileResultType(IList<InjectableConstructorArgDefinition> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
+        public static Type CompileResultType(IList<InjectableConstructorArgDefinition> definitions, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
             TypeBuilder tb = GetTypeBuilder(interfaceType);
 
-            foreach (var property in properties)
-                CreateProperty(tb, property);
+            var properties = definitions.Select(d => CreateProperty(tb, d)).ToList();
 
             CreateConstructor(tb, properties);
 
@@ -38,7 +37,7 @@ namespace DivineInject
             return objectType;
         }
 
-        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<InjectableConstructorArgDefinition> properties, IList<ConstructorArg> constructorArgs)
+        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<InjectableConstructorArg> properties, IList<ConstructorArg> constructorArgs)
         {
             var method = tb.DefineMethod(methodInfo.Name,
                 MethodAttributes.Public |
@@ -81,7 +80,7 @@ namespace DivineInject
             il.Emit(OpCodes.Ret);
         }
 
-        private static void CreateConstructor(TypeBuilder tb, IList<InjectableConstructorArgDefinition> properties)
+        private static void CreateConstructor(TypeBuilder tb, IList<InjectableConstructorArg> properties)
         {
             var constructor = tb.DefineConstructor(
                 MethodAttributes.Public |
@@ -130,13 +129,13 @@ namespace DivineInject
             return tb;
         }
 
-        private static void CreateProperty(TypeBuilder tb, InjectableConstructorArgDefinition property)
+        private static InjectableConstructorArg CreateProperty(TypeBuilder tb, InjectableConstructorArgDefinition definition)
         {
-            FieldBuilder fieldBuilder = tb.DefineField("_" + property.Name, property.PropertyType, FieldAttributes.Private);
+            FieldBuilder fieldBuilder = tb.DefineField("_" + definition.Name, definition.PropertyType, FieldAttributes.Private);
 
-            PropertyBuilder propertyBuilder = tb.DefineProperty(property.Name, PropertyAttributes.HasDefault, property.PropertyType, null);
-            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + property.Name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, 
-                property.PropertyType, Type.EmptyTypes);
+            PropertyBuilder propertyBuilder = tb.DefineProperty(definition.Name, PropertyAttributes.HasDefault, definition.PropertyType, null);
+            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + definition.Name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, 
+                definition.PropertyType, Type.EmptyTypes);
             ILGenerator getIl = getPropMthdBldr.GetILGenerator();
 
             getIl.Emit(OpCodes.Ldarg_0);
@@ -144,11 +143,11 @@ namespace DivineInject
             getIl.Emit(OpCodes.Ret);
 
             MethodBuilder setPropMthdBldr =
-                tb.DefineMethod("set_" + property.Name,
+                tb.DefineMethod("set_" + definition.Name,
                   MethodAttributes.Private |
                   MethodAttributes.SpecialName |
                   MethodAttributes.HideBySig,
-                  null, new[] { property.PropertyType });
+                  null, new[] { definition.PropertyType });
 
             ILGenerator setIl = setPropMthdBldr.GetILGenerator();
             Label modifyProperty = setIl.DefineLabel();
@@ -166,8 +165,7 @@ namespace DivineInject
             propertyBuilder.SetGetMethod(getPropMthdBldr);
             propertyBuilder.SetSetMethod(setPropMthdBldr);
 
-            property.Getter = getPropMthdBldr;
-            property.Setter = setPropMthdBldr;
+            return new InjectableConstructorArg(definition.PropertyType, definition.Name, getPropMthdBldr, setPropMthdBldr);
         }
     }
 }
