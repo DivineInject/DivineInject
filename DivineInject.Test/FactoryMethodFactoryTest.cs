@@ -28,7 +28,6 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArg>()))
@@ -57,7 +56,6 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
@@ -88,11 +86,6 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AnInjectableConstructorArg.With()
-                        .Name("Database")
-                        .PropertyType(typeof(IDatabase))
-                )))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSingleDependency")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
@@ -124,11 +117,6 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AnInjectableConstructorArg.With()
-                        .Name("Database")
-                        .PropertyType(typeof(IDatabase))
-                )))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndArg))))
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArg>().With(

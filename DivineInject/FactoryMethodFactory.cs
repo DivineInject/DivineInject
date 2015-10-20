@@ -33,7 +33,7 @@ namespace DivineInject
                 .Select(param => ToConstructorArg(param, injector))
                 .ToList();
 
-            return new FactoryMethod(constructor, properties, method.Name, method.ReturnType, consArgs);
+            return new FactoryMethod(constructor, method.Name, method.ReturnType, consArgs);
         }
 
         private IConstructorArg ToConstructorArg(ParameterInfo param, IDivineInjector injector)
