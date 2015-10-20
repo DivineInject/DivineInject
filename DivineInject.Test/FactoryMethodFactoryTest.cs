@@ -2,6 +2,7 @@
 using System.Reflection;
 using DivineInject.Test.DummyModel;
 using NUnit.Framework;
+using TestFirst.Net;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
@@ -29,6 +30,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
                 .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedProperty>()))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
             ;
         }
 
@@ -145,9 +148,22 @@ namespace DivineInject.Test
 
     internal interface IDummyFactory
     {
-        string MethodWithNoArgs();
+        DomainObjectWithDefaultConstructor MethodWithNoArgs();
         DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
         DomainObjectWithOneDependency MethodWithSingleDependency();
         DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
+    }
+
+    public class AType : PropertyMatcher<Type>
+    {
+        private AType(Type expectedType)
+        {
+            WithMatcher("type fullname", t => t.FullName, AString.EqualTo(expectedType.FullName));
+        }
+
+        public static AType EqualTo(Type type)
+        {
+            return new AType(type);
+        }
     }
 }

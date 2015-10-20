@@ -29,7 +29,7 @@ namespace DivineInject
                 .Select(param => new InjectedProperty(param.ParameterType, GetPropertyName(param.Name)))
                 .ToList();
 
-            return new FactoryMethod(constructor, properties);
+            return new FactoryMethod(constructor, properties, method.Name, method.ReturnType);
         }
 
         private string GetPropertyName(string name)
