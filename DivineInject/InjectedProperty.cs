@@ -3,7 +3,7 @@ using System.Reflection.Emit;
 
 namespace DivineInject
 {
-    class InjectedDependencyProperty
+    class InjectedProperty
     {
         public Type PropertyType { get; private set; }
         public string Name { get; private set; }
@@ -11,7 +11,7 @@ namespace DivineInject
         internal MethodBuilder Getter { get; set; }
         internal MethodBuilder Setter { get; set; }
 
-        public InjectedDependencyProperty(Type propertyType, string name)
+        public InjectedProperty(Type propertyType, string name)
         {
             PropertyType = propertyType;
             Name = name;

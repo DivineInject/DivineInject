@@ -6,9 +6,9 @@ namespace DivineInject
     internal class FactoryMethod
     {
         public ConstructorInfo Constructor { get; private set; }
-        public IList<InjectedDependencyProperty> Properties { get; private set; }
+        public IList<InjectedProperty> Properties { get; private set; }
 
-        public FactoryMethod(ConstructorInfo constructor, IList<InjectedDependencyProperty> properties)
+        public FactoryMethod(ConstructorInfo constructor, IList<InjectedProperty> properties)
         {
             Constructor = constructor;
             Properties = properties;
