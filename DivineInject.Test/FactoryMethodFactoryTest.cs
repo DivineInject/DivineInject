@@ -66,15 +66,12 @@ namespace DivineInject.Test
             FactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
-            IDatabase database;
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
                 .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithSingleDependency"))
-                .Given(database = AMock<IDatabase>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
                     .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
-                    .WhereMethod(i => i.Get(typeof(IDatabase))).Returns(database)
                     .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithOneDependency))
                 .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase) }))
@@ -86,7 +83,6 @@ namespace DivineInject.Test
                     AnInjectedDependencyProperty.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
-                        .PropertyValue(database)
                 )))
             ;
         }
@@ -100,16 +96,13 @@ namespace DivineInject.Test
             FactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
-            IDatabase database;
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
                 .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithDependencyAndArg"))
-                .Given(database = AMock<IDatabase>().Instance)
                 .Given(injector = AMock<IDivineInjector>()
                     .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
                     .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
-                    .WhereMethod(i => i.Get(typeof(IDatabase))).Returns(database)
                     .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithDependencyAndArg))
                 .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase), typeof(string) }))
@@ -121,7 +114,6 @@ namespace DivineInject.Test
                     AnInjectedDependencyProperty.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
-                        .PropertyValue(database)
                 )))
             ;
         }

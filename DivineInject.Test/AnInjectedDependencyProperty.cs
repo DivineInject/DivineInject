@@ -38,16 +38,5 @@ namespace DivineInject.Test
             WithProperty(() => PropertyNames.Name, name);
             return this;
         }
-
-        public AnInjectedDependencyProperty PropertyValue(object propertyValue)
-        {
-            return PropertyValue(AnInstance.SameAs(propertyValue));
-        }
-
-        public AnInjectedDependencyProperty PropertyValue(IMatcher<object> propertyValue)
-        {
-            WithProperty(() => PropertyNames.PropertyValue, propertyValue);
-            return this;
-        }
     }
 }

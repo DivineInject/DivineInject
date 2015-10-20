@@ -42,8 +42,8 @@ namespace DivineInject.Test
                     .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
                     .WhereMethod(i => i.Get(typeof(int))).Returns(42)
                     .Instance)
-                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age"))
 
                 .Given(generator = new ClassGenerator())
 
@@ -75,8 +75,8 @@ namespace DivineInject.Test
                     .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
                     .WhereMethod(i => i.Get(typeof(int))).Returns(42)
                     .Instance)
-                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age"))
 
                 .Given(generator = new ClassGenerator())
 
@@ -109,8 +109,8 @@ namespace DivineInject.Test
                     .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
                     .WhereMethod(i => i.Get(typeof(int))).Returns(42)
                     .Instance)
-                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age"))
 
                 .Given(generator = new ClassGenerator())
 
@@ -140,8 +140,8 @@ namespace DivineInject.Test
                     .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
                     .WhereMethod(i => i.Get(typeof(int))).Returns(42)
                     .Instance)
-                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age"))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
                 .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
 
@@ -175,8 +175,8 @@ namespace DivineInject.Test
                     .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
                     .WhereMethod(i => i.Get(typeof(int))).Returns(42)
                     .Instance)
-                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age"))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
                 .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
                 .Given(constructorArg3 = new ConstructorArg(typeof(string), null, 0))
