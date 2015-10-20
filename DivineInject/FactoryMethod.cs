@@ -3,7 +3,13 @@ using System.Reflection;
 
 namespace DivineInject
 {
-    internal class FactoryMethod
+    public interface IFactoryMethod
+    {
+        ConstructorInfo Constructor { get; }
+        IList<InjectedProperty> Properties { get; }
+    }
+
+    internal class FactoryMethod : IFactoryMethod
     {
         public ConstructorInfo Constructor { get; private set; }
         public IList<InjectedProperty> Properties { get; private set; }

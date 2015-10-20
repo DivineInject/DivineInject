@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
@@ -15,7 +16,7 @@ namespace DivineInject.Test
             FactoryMethodFactory factoryMethodFactory;
             MethodInfo methodInfo;
             IDivineInjector injector;
-            FactoryMethod factoryMethod;
+            IFactoryMethod factoryMethod;
             Type domainObjectType;
 
             Scenario()
@@ -37,7 +38,7 @@ namespace DivineInject.Test
             FactoryMethodFactory factoryMethodFactory;
             MethodInfo methodInfo;
             IDivineInjector injector;
-            FactoryMethod factoryMethod;
+            IFactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
 
@@ -63,7 +64,7 @@ namespace DivineInject.Test
             FactoryMethodFactory factoryMethodFactory;
             MethodInfo methodInfo;
             IDivineInjector injector;
-            FactoryMethod factoryMethod;
+            IFactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
 
@@ -93,7 +94,7 @@ namespace DivineInject.Test
             FactoryMethodFactory factoryMethodFactory;
             MethodInfo methodInfo;
             IDivineInjector injector;
-            FactoryMethod factoryMethod;
+            IFactoryMethod factoryMethod;
             Type domainObjectType;
             ConstructorInfo expectedConstructor;
 
@@ -142,46 +143,11 @@ namespace DivineInject.Test
         }
     }
 
-    public interface IDatabase
-    {
-    }
-
     internal interface IDummyFactory
     {
         string MethodWithNoArgs();
         DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
         DomainObjectWithOneDependency MethodWithSingleDependency();
         DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
-    }
-
-    internal class DomainObjectWithDefaultConstructor
-    {
-    }
-
-    internal class DomainObjectWithSingleArgConstructor
-    {
-        public DomainObjectWithSingleArgConstructor()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DomainObjectWithSingleArgConstructor(string name)
-        {
-            
-        }
-    }
-
-    internal class DomainObjectWithOneDependency
-    {
-        public DomainObjectWithOneDependency(IDatabase database)
-        {
-        }
-    }
-
-    internal class DomainObjectWithDependencyAndArg
-    {
-        public DomainObjectWithDependencyAndArg(IDatabase database, string name)
-        {
-        }
     }
 }

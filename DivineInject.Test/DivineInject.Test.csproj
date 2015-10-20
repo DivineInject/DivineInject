@@ -52,9 +52,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AMethodInfo.cs" />
     <Compile Include="AnInjectedProperty.cs" />
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
+    <Compile Include="DummyModel\DomainObjectWithDefaultConstructor.cs" />
+    <Compile Include="DummyModel\DomainObjectWithDependencyAndArg.cs" />
+    <Compile Include="DummyModel\DomainObjectWithOneDependency.cs" />
+    <Compile Include="DummyModel\DomainObjectWithSingleArgConstructor.cs" />
+    <Compile Include="DummyModel\IDatabase.cs" />
+    <Compile Include="FactoryClassFactoryTest.cs" />
     <Compile Include="FactoryMethodFactoryTest.cs" />
     <Compile Include="InstantiatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

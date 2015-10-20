@@ -4,9 +4,14 @@ using System.Reflection;
 
 namespace DivineInject
 {
-    internal class FactoryMethodFactory
+    public interface IFactoryMethodFactory
     {
-        public FactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType)
+        IFactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType);
+    }
+
+    internal class FactoryMethodFactory : IFactoryMethodFactory
+    {
+        public IFactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType)
         {
             var methodArgs = method.GetParameters();
             var constructors = domainObjectType.GetConstructors().Where(cons => ConstructorCanBeCalled(cons, methodArgs, injector));
