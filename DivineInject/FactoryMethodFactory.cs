@@ -24,11 +24,6 @@ namespace DivineInject
                         method.DeclaringType.Name,
                         method.Name));
 
-            var properties = constructor.GetParameters()
-                .Where(param => injector.IsBound(param.ParameterType))
-                .Select(param => new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name)))
-                .ToList();
-
             var consArgs = constructor.GetParameters()
                 .Select(param => ToConstructorArg(param, injector))
                 .ToList();
