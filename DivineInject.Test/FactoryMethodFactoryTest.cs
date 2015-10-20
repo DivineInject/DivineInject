@@ -60,6 +60,9 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
+                .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
+                    APassedConstructorArg.With().Type(typeof(string))
+                )))
             ;
         }
 

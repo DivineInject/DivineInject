@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AMethodInfo.cs" />
     <Compile Include="AnInjectableConstructorArg.cs" />
+    <Compile Include="APassedConstructorArg.cs" />
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
     <Compile Include="DummyModel\DomainObjectWithDefaultConstructor.cs" />

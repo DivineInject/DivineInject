@@ -30,15 +30,17 @@ namespace DivineInject
                 .ToList();
 
             var consArgs = constructor.GetParameters()
-                .Select(ToConstructorArg)
+                .Select(param => ToConstructorArg(param, injector))
                 .ToList();
 
             return new FactoryMethod(constructor, properties, method.Name, method.ReturnType, consArgs);
         }
 
-        private IConstructorArg ToConstructorArg(ParameterInfo param)
+        private IConstructorArg ToConstructorArg(ParameterInfo param, IDivineInjector injector)
         {
-            return new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name));
+            if (injector.IsBound(param.ParameterType))
+                return new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name));
+            return new PassedConstructorArg(param.ParameterType);
         }
 
         private string GetPropertyName(string name)
