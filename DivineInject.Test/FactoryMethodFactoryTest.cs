@@ -2,7 +2,6 @@
 using System.Reflection;
 using DivineInject.Test.DummyModel;
 using NUnit.Framework;
-using TestFirst.Net;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
@@ -32,6 +31,7 @@ namespace DivineInject.Test
                 .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
+                .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArg>()))
             ;
         }
 
@@ -92,6 +92,9 @@ namespace DivineInject.Test
                 )))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSingleDependency")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
+                .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
+                    AnInjectableConstructorArg.With().Name("Database").PropertyType(typeof(IDatabase))
+                )))
             ;
         }
 

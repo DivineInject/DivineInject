@@ -22,12 +22,13 @@ namespace DivineInject
         public IList<IConstructorArg> ConstructorArgs { get; private set; } 
 
         public FactoryMethod(ConstructorInfo constructor, IList<InjectableConstructorArg> properties, string name,
-            Type returnType)
+            Type returnType, IList<IConstructorArg> constructorArgs)
         {
             Constructor = constructor;
             Properties = properties;
             Name = name;
             ReturnType = returnType;
+            ConstructorArgs = constructorArgs;
         }
     }
 }

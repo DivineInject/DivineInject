@@ -29,7 +29,16 @@ namespace DivineInject
                 .Select(param => new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name)))
                 .ToList();
 
-            return new FactoryMethod(constructor, properties, method.Name, method.ReturnType);
+            var consArgs = constructor.GetParameters()
+                .Select(ToConstructorArg)
+                .ToList();
+
+            return new FactoryMethod(constructor, properties, method.Name, method.ReturnType, consArgs);
+        }
+
+        private IConstructorArg ToConstructorArg(ParameterInfo param)
+        {
+            return new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name));
         }
 
         private string GetPropertyName(string name)
