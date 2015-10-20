@@ -23,7 +23,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new List<GeneratedProperty>(), new List<ConstructorArg>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(new List<InjectedDependencyProperty>(), new List<ConstructorArg>()))
 
                 .Then(instance, Is(AnInstance.NotNull()))
             ;
@@ -33,12 +33,12 @@ namespace DivineInject.Test
         public void GeneratesClassWithProperties()
         {
             ClassGenerator generator;
-            GeneratedProperty property1, property2;
+            InjectedDependencyProperty property1, property2;
             dynamic instance;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
@@ -58,12 +58,12 @@ namespace DivineInject.Test
         public void GeneratesClassImplementingInterface()
         {
             ClassGenerator generator;
-            GeneratedProperty property1, property2;
+            InjectedDependencyProperty property1, property2;
             dynamic instance;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
@@ -83,13 +83,13 @@ namespace DivineInject.Test
         public void FactoryMethodOnInterfaceCreatesObjectWithoutConstructorArgs()
         {
             ClassGenerator generator;
-            GeneratedProperty property1, property2;
+            InjectedDependencyProperty property1, property2;
             IFactory factory;
             IDomainObject obj;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
@@ -105,14 +105,14 @@ namespace DivineInject.Test
         public void FactoryMethodOnInterfaceCreatesObjectWithConstructorArgs()
         {
             ClassGenerator generator;
-            GeneratedProperty property1, property2;
+            InjectedDependencyProperty property1, property2;
             IFactory factory;
             IDomainObject obj;
             ConstructorArg constructorArg1, constructorArg2;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
                 .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
 
@@ -134,14 +134,14 @@ namespace DivineInject.Test
         public void FactoryMethodOnInterfaceCreatesObjectWithConstructorArgsFromFactoryWithArgs()
         {
             ClassGenerator generator;
-            GeneratedProperty property1, property2;
+            InjectedDependencyProperty property1, property2;
             IFactoryWithArg factory;
             IDomainObject obj;
             ConstructorArg constructorArg1, constructorArg2, constructorArg3;
 
             Scenario()
-                .Given(property1 = new GeneratedProperty(typeof(string), "Name", "Bob"))
-                .Given(property2 = new GeneratedProperty(typeof(int), "Age", 42))
+                .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
+                .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
                 .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
                 .Given(constructorArg3 = new ConstructorArg(typeof(string), null, 0))

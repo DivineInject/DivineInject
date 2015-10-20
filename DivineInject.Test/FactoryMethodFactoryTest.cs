@@ -27,7 +27,7 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedDependencyProperty>()))
             ;
         }
 
@@ -53,7 +53,7 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<GeneratedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedDependencyProperty>()))
             ;
         }
 
@@ -83,7 +83,7 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AGeneratedProperty.With()
+                    AnInjectedDependencyProperty.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                         .PropertyValue(database)
@@ -118,7 +118,7 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AGeneratedProperty.With()
+                    AnInjectedDependencyProperty.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                         .PropertyValue(database)

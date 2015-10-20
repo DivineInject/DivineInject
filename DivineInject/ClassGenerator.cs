@@ -8,18 +8,18 @@ namespace DivineInject
 {
     class ClassGenerator
     {
-        public TInterface Generate<TInterface, TImpl>(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs)
+        public TInterface Generate<TInterface, TImpl>(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs)
         {
             return (TInterface) CreateNewObject(properties, constructorArgs, typeof(TInterface), typeof(TImpl));
         }
 
-        private static object CreateNewObject(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
+        private static object CreateNewObject(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
             var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
             return Activator.CreateInstance(myType, properties.Select(p => p.PropertyValue).ToArray());
         }
 
-        public static Type CompileResultType(IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
+        public static Type CompileResultType(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
             TypeBuilder tb = GetTypeBuilder(interfaceType);
 
@@ -35,7 +35,7 @@ namespace DivineInject
             return objectType;
         }
 
-        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<GeneratedProperty> properties, IList<ConstructorArg> constructorArgs)
+        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs)
         {
             var method = tb.DefineMethod(methodInfo.Name,
                 MethodAttributes.Public |
@@ -78,7 +78,7 @@ namespace DivineInject
             il.Emit(OpCodes.Ret);
         }
 
-        private static void CreateConstructor(TypeBuilder tb, IList<GeneratedProperty> properties)
+        private static void CreateConstructor(TypeBuilder tb, IList<InjectedDependencyProperty> properties)
         {
             var constructor = tb.DefineConstructor(
                 MethodAttributes.Public |
@@ -127,7 +127,7 @@ namespace DivineInject
             return tb;
         }
 
-        private static void CreateProperty(TypeBuilder tb, GeneratedProperty property)
+        private static void CreateProperty(TypeBuilder tb, InjectedDependencyProperty property)
         {
             FieldBuilder fieldBuilder = tb.DefineField("_" + property.Name, property.PropertyType, FieldAttributes.Private);
 
