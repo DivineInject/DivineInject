@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AMethodInfo.cs" />
-    <Compile Include="AnInjectedProperty.cs" />
+    <Compile Include="AnInjectableConstructorArg.cs" />
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
     <Compile Include="DummyModel\DomainObjectWithDefaultConstructor.cs" />

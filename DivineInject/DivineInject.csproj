@@ -47,8 +47,10 @@
     <Compile Include="FactoryClassFactory.cs" />
     <Compile Include="FactoryMethod.cs" />
     <Compile Include="FactoryMethodFactory.cs" />
-    <Compile Include="InjectedProperty.cs" />
+    <Compile Include="IConstructorArg.cs" />
+    <Compile Include="InjectableConstructorArg.cs" />
     <Compile Include="Instantiator.cs" />
+    <Compile Include="PassedConstructorArg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

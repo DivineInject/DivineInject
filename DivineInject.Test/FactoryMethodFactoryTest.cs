@@ -29,7 +29,7 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
             ;
@@ -57,7 +57,7 @@ namespace DivineInject.Test
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectedProperty>()))
+                .Then(factoryMethod.Properties, Is(AList.NoItems<InjectableConstructorArg>()))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
             ;
@@ -86,7 +86,7 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AnInjectedProperty.With()
+                    AnInjectableConstructorArg.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                 )))
@@ -119,7 +119,7 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Properties, Is(AList.InOrder().WithOnly(
-                    AnInjectedProperty.With()
+                    AnInjectableConstructorArg.With()
                         .Name("Database")
                         .PropertyType(typeof(IDatabase))
                 )))

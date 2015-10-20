@@ -26,7 +26,7 @@ namespace DivineInject
 
             var properties = constructor.GetParameters()
                 .Where(param => injector.IsBound(param.ParameterType))
-                .Select(param => new InjectedProperty(param.ParameterType, GetPropertyName(param.Name)))
+                .Select(param => new InjectableConstructorArg(param.ParameterType, GetPropertyName(param.Name)))
                 .ToList();
 
             return new FactoryMethod(constructor, properties, method.Name, method.ReturnType);

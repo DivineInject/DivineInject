@@ -7,7 +7,7 @@ namespace DivineInject
     public interface IFactoryMethod
     {
         ConstructorInfo Constructor { get; }
-        IList<InjectedProperty> Properties { get; }
+        IList<InjectableConstructorArg> Properties { get; }
         string Name { get; }
         Type ReturnType { get; }
     }
@@ -15,11 +15,12 @@ namespace DivineInject
     internal class FactoryMethod : IFactoryMethod
     {
         public ConstructorInfo Constructor { get; private set; }
-        public IList<InjectedProperty> Properties { get; private set; }
+        public IList<InjectableConstructorArg> Properties { get; private set; }
         public string Name { get; private set; }
         public Type ReturnType { get; private set; }
+        public IList<IConstructorArg> ConstructorArgs { get; private set; } 
 
-        public FactoryMethod(ConstructorInfo constructor, IList<InjectedProperty> properties, string name,
+        public FactoryMethod(ConstructorInfo constructor, IList<InjectableConstructorArg> properties, string name,
             Type returnType)
         {
             Constructor = constructor;
