@@ -9,7 +9,6 @@ namespace DivineInject.Test
     public class FactoryClassFactoryTest : AbstractNUnitMoqScenarioTest
     {
         [Test]
-        [Ignore("work in progress")]
         public void CreatesFactoryClass()
         {
             IFactoryMethodFactory methodFactory;

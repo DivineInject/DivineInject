@@ -4,6 +4,11 @@ namespace DivineInject
 {
     internal class FactoryClass
     {
-        public IList<FactoryMethod> Methods { get; private set; } 
+        public IList<IFactoryMethod> Methods { get; private set; }
+
+        public FactoryClass(IList<IFactoryMethod> methods)
+        {
+            Methods = methods;
+        }
     }
 }

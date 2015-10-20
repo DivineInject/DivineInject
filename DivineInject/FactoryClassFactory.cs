@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DivineInject
 {
@@ -13,7 +14,10 @@ namespace DivineInject
 
         public FactoryClass Create(Type factoryInterface, IDivineInjector injector, Type domainObjectType)
         {
-            throw new NotImplementedException();
+            var methods = factoryInterface.GetMethods()
+                .Select(m => m_methodFactory.Create(m, injector, domainObjectType))
+                .ToList();
+            return new FactoryClass(methods);
         }
     }
 }
