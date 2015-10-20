@@ -48,6 +48,7 @@
     <Compile Include="FactoryMethod.cs" />
     <Compile Include="FactoryMethodFactory.cs" />
     <Compile Include="IConstructorArgDefinition.cs" />
+    <Compile Include="IFactoryClassEmitter.cs" />
     <Compile Include="InjectableConstructorArg.cs" />
     <Compile Include="InjectableConstructorArgDefinition.cs" />
     <Compile Include="Instantiator.cs" />

@@ -3,7 +3,7 @@ using System.Reflection.Emit;
 
 namespace DivineInject
 {
-    internal class InjectableConstructorArg
+    public class InjectableConstructorArg
     {
         public Type PropertyType { get; private set; }
         public string Name { get; private set; }
