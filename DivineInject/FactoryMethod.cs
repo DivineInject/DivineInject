@@ -10,6 +10,7 @@ namespace DivineInject
         IList<InjectableConstructorArg> Properties { get; }
         string Name { get; }
         Type ReturnType { get; }
+        IList<IConstructorArg> ConstructorArgs { get; } 
     }
 
     internal class FactoryMethod : IFactoryMethod
