@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using TestFirst.Net.Extensions.NUnit;
 using TestFirst.Net.Matcher;
 using System.Reflection;
 using TestFirst.Net;
+using TestFirst.Net.Extensions.Moq;
 
 namespace DivineInject.Test
 {
     [TestFixture]
-    public class ClassGeneratorTest : AbstractNUnitScenarioTest
+    public class ClassGeneratorTest : AbstractNUnitMoqScenarioTest
     {
         [Test]
         public void GeneratesBasicClass()
         {
             ClassGenerator generator;
             object instance;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>().Instance)
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new List<InjectedDependencyProperty>(), new List<ConstructorArg>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(
+                    new List<InjectedDependencyProperty>(), new List<ConstructorArg>(), injector))
 
                 .Then(instance, Is(AnInstance.NotNull()))
             ;
@@ -35,14 +35,22 @@ namespace DivineInject.Test
             ClassGenerator generator;
             InjectedDependencyProperty property1, property2;
             dynamic instance;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
+                    .WhereMethod(i => i.Get(typeof(int))).Returns(42)
+                    .Instance)
                 .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(
+                    new[] { property1, property2 }, 
+                    new List<ConstructorArg>(),
+                    injector))
 
                 .Then(instance, Is(AnInstance.NotNull()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
@@ -60,14 +68,22 @@ namespace DivineInject.Test
             ClassGenerator generator;
             InjectedDependencyProperty property1, property2;
             dynamic instance;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
+                    .WhereMethod(i => i.Get(typeof(int))).Returns(42)
+                    .Instance)
                 .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
-                .When(instance = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
+                .When(instance = generator.Generate<IFactory, DomainObject>(
+                    new[] { property1, property2 }, 
+                    new List<ConstructorArg>(),
+                    injector))
 
                 .Then(instance, Is(AnInstance.NotNull<IFactory>()))
                 .Then(instance.GetType().GetProperties(), Is(AList.InAnyOrder().WithAtLeast(
@@ -86,14 +102,22 @@ namespace DivineInject.Test
             InjectedDependencyProperty property1, property2;
             IFactory factory;
             IDomainObject obj;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
+                    .WhereMethod(i => i.Get(typeof(int))).Returns(42)
+                    .Instance)
                 .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
 
                 .Given(generator = new ClassGenerator())
 
-                .When(factory = generator.Generate<IFactory, DomainObject>(new[] { property1, property2 }, new List<ConstructorArg>()))
+                .When(factory = generator.Generate<IFactory, DomainObject>(
+                    new[] { property1, property2 }, 
+                    new List<ConstructorArg>(),
+                    injector))
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
@@ -109,8 +133,13 @@ namespace DivineInject.Test
             IFactory factory;
             IDomainObject obj;
             ConstructorArg constructorArg1, constructorArg2;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
+                    .WhereMethod(i => i.Get(typeof(int))).Returns(42)
+                    .Instance)
                 .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
@@ -120,7 +149,8 @@ namespace DivineInject.Test
 
                 .When(factory = generator.Generate<IFactory, DomainObject>(
                     new[] { property1, property2 },
-                    new[] { constructorArg1, constructorArg2 }))
+                    new[] { constructorArg1, constructorArg2 },
+                    injector))
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
@@ -138,8 +168,13 @@ namespace DivineInject.Test
             IFactoryWithArg factory;
             IDomainObject obj;
             ConstructorArg constructorArg1, constructorArg2, constructorArg3;
+            IDivineInjector injector;
 
             Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.Get(typeof(string))).Returns("Bob")
+                    .WhereMethod(i => i.Get(typeof(int))).Returns(42)
+                    .Instance)
                 .Given(property1 = new InjectedDependencyProperty(typeof(string), "Name", "Bob"))
                 .Given(property2 = new InjectedDependencyProperty(typeof(int), "Age", 42))
                 .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
@@ -150,7 +185,8 @@ namespace DivineInject.Test
 
                 .When(factory = generator.Generate<IFactoryWithArg, DomainObject>(
                     new[] { property1, property2 },
-                    new[] { constructorArg1, constructorArg2, constructorArg3 }))
+                    new[] { constructorArg1, constructorArg2, constructorArg3 },
+                    injector))
                 .When(obj = factory.Create("developer"))
 
                 .Then(obj, Is(AnInstance.NotNull()))

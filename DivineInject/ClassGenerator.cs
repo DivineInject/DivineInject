@@ -8,15 +8,18 @@ namespace DivineInject
 {
     class ClassGenerator
     {
-        public TInterface Generate<TInterface, TImpl>(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs)
+        public TInterface Generate<TInterface, TImpl>(IList<InjectedDependencyProperty> properties, 
+            IList<ConstructorArg> constructorArgs, IDivineInjector injector)
         {
-            return (TInterface) CreateNewObject(properties, constructorArgs, typeof(TInterface), typeof(TImpl));
+            return (TInterface) CreateNewObject(properties, constructorArgs, typeof(TInterface), typeof(TImpl), injector);
         }
 
-        private static object CreateNewObject(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
+        private static object CreateNewObject(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs, 
+            Type interfaceType, Type implType, IDivineInjector injector)
         {
             var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
-            return Activator.CreateInstance(myType, properties.Select(p => p.PropertyValue).ToArray());
+            var propertyValues = properties.Select(p => injector.Get(p.PropertyType)).ToArray();
+            return Activator.CreateInstance(myType, propertyValues);
         }
 
         public static Type CompileResultType(IList<InjectedDependencyProperty> properties, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
