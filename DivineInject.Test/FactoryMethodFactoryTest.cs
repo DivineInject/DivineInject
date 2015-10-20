@@ -2,7 +2,6 @@
 using System.Reflection;
 using DivineInject.Test.DummyModel;
 using NUnit.Framework;
-using TestFirst.Net;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
