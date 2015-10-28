@@ -6,7 +6,8 @@ namespace DivineInject
 {
     public interface IConstructorArgList
     {
-        
+        void Add(IConstructorArgDefinition defn);
+        IList<IConstructorArg> Arguments { get; }
     }
 
     internal class ConstructorArgList : IConstructorArgList
