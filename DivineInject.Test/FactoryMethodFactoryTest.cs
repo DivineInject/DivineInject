@@ -29,7 +29,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(domainObjectType.GetConstructor(new Type[0]))))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithNoArgs")))
-                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(IDomainObject))))
+                .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
                 .Then(factoryMethod.Parameters, Is(AList.NoItems<Type>()))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArgDefinition>()))
             ;
@@ -58,7 +59,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSinglePassedArg")))
-                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(IDomainObject))))
+                .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
                 .Then(factoryMethod.Parameters, Is(AList.InOrder().WithOnlyValues(typeof(string))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
                     APassedConstructorArgDefinition.With().Type(typeof(string))
@@ -89,7 +91,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithSingleDependency")))
-                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(IDomainObject))))
+                .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
                 .Then(factoryMethod.Parameters, Is(AList.NoItems<Type>()))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase))
@@ -122,7 +125,8 @@ namespace DivineInject.Test
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
                 .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndTwoArgs")))
-                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndTwoArgs))))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(IDomainObject))))
+                .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndTwoArgs))))
                 .Then(factoryMethod.Parameters, Is(AList.InOrder().WithOnlyValues(typeof(string), typeof(int))))
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)),
@@ -158,10 +162,10 @@ namespace DivineInject.Test
 
     internal interface IDummyFactory
     {
-        DomainObjectWithDefaultConstructor MethodWithNoArgs();
-        DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
-        DomainObjectWithOneDependency MethodWithSingleDependency();
-        DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
-        DomainObjectWithDependencyAndTwoArgs MethodWithDependencyAndTwoArgs(string name, int timeout);
+        IDomainObject MethodWithNoArgs();
+        IDomainObject MethodWithSinglePassedArg(string name);
+        IDomainObject MethodWithSingleDependency();
+        IDomainObject MethodWithDependencyAndArg(string name);
+        IDomainObject MethodWithDependencyAndTwoArgs(string name, int timeout);
     }
 }

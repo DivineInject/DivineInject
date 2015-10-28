@@ -1,6 +1,6 @@
 ﻿namespace DivineInject.Test.DummyModel
 {
-    class DomainObjectWithDependencyAndTwoArgs
+    class DomainObjectWithDependencyAndTwoArgs : IDomainObject
     {
         public DomainObjectWithDependencyAndTwoArgs(IDatabase database, string name, int timeout)
         {

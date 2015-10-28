@@ -28,7 +28,7 @@ namespace DivineInject
                 .Select(param => ToConstructorArg(method, param, injector))
                 .ToList();
 
-            return new FactoryMethod(constructor, method.Name, method.ReturnType, methodArgs.Select(a => a.ParameterType).ToArray(), consArgs);
+            return new FactoryMethod(constructor, method.Name, method.ReturnType, domainObjectType, methodArgs.Select(a => a.ParameterType).ToArray(), consArgs);
         }
 
         private IConstructorArgDefinition ToConstructorArg(MethodInfo method, ParameterInfo param, IDivineInjector injector)

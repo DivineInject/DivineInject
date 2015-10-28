@@ -65,6 +65,7 @@
     <Compile Include="DummyModel\DomainObjectWithOneDependency.cs" />
     <Compile Include="DummyModel\DomainObjectWithSingleArgConstructor.cs" />
     <Compile Include="DummyModel\IDatabase.cs" />
+    <Compile Include="DummyModel\IDomainObject.cs" />
     <Compile Include="FactoryClassFactoryTest.cs" />
     <Compile Include="FactoryMethodFactoryTest.cs" />
     <Compile Include="InstantiatorTest.cs" />

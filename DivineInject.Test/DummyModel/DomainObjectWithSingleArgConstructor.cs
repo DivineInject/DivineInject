@@ -2,7 +2,7 @@ using System;
 
 namespace DivineInject.Test.DummyModel
 {
-    internal class DomainObjectWithSingleArgConstructor
+    internal class DomainObjectWithSingleArgConstructor : IDomainObject
     {
         public DomainObjectWithSingleArgConstructor()
         {
