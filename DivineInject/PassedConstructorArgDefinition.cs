@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 
 namespace DivineInject
@@ -28,6 +29,11 @@ namespace DivineInject
         public IConstructorArg Define(TypeBuilder tb)
         {
             return new PassedConstructorArg(ParameterType, ParameterIndex);
+        }
+
+        public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
+        {
+            throw new NotImplementedException();
         }
     }
 }

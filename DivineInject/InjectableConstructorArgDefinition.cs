@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -58,6 +59,11 @@ namespace DivineInject
             propertyBuilder.SetSetMethod(setPropMthdBldr);
 
             return new InjectableConstructorArg(PropertyType, Name, getPropMthdBldr, setPropMthdBldr);
+        }
+
+        public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,7 +8,9 @@ namespace DivineInject
     {
         public ConstructorArgList(TypeBuilder tb, params IConstructorArgDefinition[] definitions)
         {
-            Arguments = definitions.Select(d => d.Define(tb)).ToList();
+            Arguments = new List<IConstructorArg>();
+            foreach (var defn in definitions.Where(defn => defn.FindExisting(Arguments) == null))
+                Arguments.Add(defn.Define(tb));
         }
 
         public IList<IConstructorArg> Arguments { get; private set; } 
