@@ -6,7 +6,7 @@ namespace DivineInject
     {
         public IList<IFactoryMethod> Methods { get; private set; }
 
-        public FactoryClass(IList<IFactoryMethod> methods)
+        public FactoryClass(IConstructorArgList argList, IList<IFactoryMethod> methods)
         {
             Methods = methods;
         }
