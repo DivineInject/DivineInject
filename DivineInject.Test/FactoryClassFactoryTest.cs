@@ -1,4 +1,5 @@
-﻿using DivineInject.Test.DummyModel;
+﻿using System.Collections.Generic;
+using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
@@ -19,8 +20,12 @@ namespace DivineInject.Test
             IFactoryMethod method2;
 
             Scenario()
-                .Given(method1 = AMock<IFactoryMethod>().Instance)
-                .Given(method2 = AMock<IFactoryMethod>().Instance)
+                .Given(method1 = AMock<IFactoryMethod>()
+                    .WhereGet(m => m.ConstructorArgs).Returns(new List<IConstructorArgDefinition>())
+                    .Instance)
+                .Given(method2 = AMock<IFactoryMethod>()
+                    .WhereGet(m => m.ConstructorArgs).Returns(new List<IConstructorArgDefinition>())
+                    .Instance)
                 .Given(injector = AMock<IDivineInjector>().Instance)
                 .Given(methodFactory = AMock<IFactoryMethodFactory>()
                     .WhereMethod(f => f.Create(

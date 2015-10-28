@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DivineInject
 {
@@ -9,6 +10,8 @@ namespace DivineInject
         public FactoryClass(IConstructorArgList argList, IList<IFactoryMethod> methods)
         {
             Methods = methods;
+            foreach (var definition in methods.SelectMany(m => m.ConstructorArgs))
+                argList.Add(definition);
         }
     }
 }
