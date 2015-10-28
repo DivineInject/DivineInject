@@ -4,16 +4,22 @@ using System.Reflection.Emit;
 
 namespace DivineInject
 {
-    public class InjectableConstructorArgDefinition : IConstructorArgDefinition
+    public interface IInjectableConstructorArgDefinition : IConstructorArgDefinition
     {
-        public Type PropertyType { get; private set; }
-        public string Name { get; private set; }
+        Type PropertyType { get; }
+        string Name { get; }
+    }
 
+    public class InjectableConstructorArgDefinition : IInjectableConstructorArgDefinition
+    {
         public InjectableConstructorArgDefinition(Type propertyType, string name)
         {
             PropertyType = propertyType;
             Name = name;
         }
+
+        public Type PropertyType { get; private set; }
+        public string Name { get; private set; }
 
         public IConstructorArg Define(TypeBuilder tb)
         {
