@@ -27,5 +27,17 @@ namespace DivineInject.Test
             WithProperty(() => PropertyNames.ParameterType, type);
             return this;
         }
+
+        public APassedConstructorArgDefinition Index(int index)
+        {
+            return Index(AnInt.EqualTo(index));
+        }
+
+        public APassedConstructorArgDefinition Index(IMatcher<int?> index)
+
+        {
+            WithProperty(() => PropertyNames.ParameterIndex, index);
+            return this;
+        }
     }
 }

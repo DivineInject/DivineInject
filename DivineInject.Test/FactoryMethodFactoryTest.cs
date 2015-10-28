@@ -95,7 +95,7 @@ namespace DivineInject.Test
         }
 
         [Test]
-        public void CreatesFactoryMethodForMethodWithOneArgAndAnInjectableDependency()
+        public void CreatesFactoryMethodForMethodWithTwoArgsAndAnInjectableDependency()
         {
             FactoryMethodFactory factoryMethodFactory;
             MethodInfo methodInfo;
@@ -106,22 +106,24 @@ namespace DivineInject.Test
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
-                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithDependencyAndArg"))
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithDependencyAndTwoArgs"))
                 .Given(injector = AMock<IDivineInjector>()
                     .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .WhereMethod(i => i.IsBound(typeof(int))).Returns(false)
                     .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
                     .Instance)
-                .Given(domainObjectType = typeof(DomainObjectWithDependencyAndArg))
-                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase), typeof(string) }))
+                .Given(domainObjectType = typeof(DomainObjectWithDependencyAndTwoArgs))
+                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(IDatabase), typeof(string), typeof(int) }))
 
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
                 .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
-                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndArg")))
-                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndArg))))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithDependencyAndTwoArgs")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithDependencyAndTwoArgs))))
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)),
-                    APassedConstructorArgDefinition.With().Type(typeof(string))
+                    APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0),
+                    APassedConstructorArgDefinition.With().Type(typeof(int)).Index(1)
                 )))
             ;
         }
@@ -156,5 +158,6 @@ namespace DivineInject.Test
         DomainObjectWithSingleArgConstructor MethodWithSinglePassedArg(string name);
         DomainObjectWithOneDependency MethodWithSingleDependency();
         DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
+        DomainObjectWithDependencyAndTwoArgs MethodWithDependencyAndTwoArgs(string name, int timeout);
     }
 }

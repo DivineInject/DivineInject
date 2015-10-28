@@ -25,6 +25,14 @@ namespace DivineInject.Test
             {
                 return new AMixedList<T>(value1, value2);
             }
+
+            public AMixedList<T> With<T1, T2, T3>(IMatcher<T1> value1, IMatcher<T2> value2, IMatcher<T3> value3)
+                where T1 : T
+                where T2 : T
+                where T3 : T
+            {
+                return new AMixedList<T>(value1, value2, value3);
+            }
         }
     }
 

@@ -25,17 +25,25 @@ namespace DivineInject
                         method.Name));
 
             var consArgs = constructor.GetParameters()
-                .Select(param => ToConstructorArg(param, injector))
+                .Select(param => ToConstructorArg(method, param, injector))
                 .ToList();
 
             return new FactoryMethod(constructor, method.Name, method.ReturnType, consArgs);
         }
 
-        private IConstructorArgDefinition ToConstructorArg(ParameterInfo param, IDivineInjector injector)
+        private IConstructorArgDefinition ToConstructorArg(MethodInfo method, ParameterInfo param, IDivineInjector injector)
         {
             if (injector.IsBound(param.ParameterType))
                 return new InjectableConstructorArgDefinition(param.ParameterType, GetPropertyName(param.Name));
-            return new PassedConstructorArgDefinition(param.ParameterType);
+            return new PassedConstructorArgDefinition(param.ParameterType, MethodArgIndex(param, method));
+        }
+
+        private int MethodArgIndex(ParameterInfo param, MethodInfo method)
+        {
+            var matchingArgInMethod = method.GetParameters().FirstOrDefault(p => p.ParameterType == param.ParameterType);
+            if (matchingArgInMethod == null)
+                throw new Exception("Failed to match constructor arg with arg in method");
+            return matchingArgInMethod.Position;
         }
 
         private string GetPropertyName(string name)
