@@ -17,7 +17,7 @@ namespace DivineInject
 
         public IList<InjectableConstructorArg> EmitInjectableProperties(IList<InjectableConstructorArgDefinition> definitions)
         {
-            return definitions.Select(d => CreateProperty(m_tb, d)).ToList();
+            return definitions.Select(d => d.CreateProperty(m_tb)).ToList();
         }
 
         public void EmitConstructor(IList<InjectableConstructorArg> properties)
@@ -67,45 +67,6 @@ namespace DivineInject
                 , null);
             tb.AddInterfaceImplementation(interfaceType);
             return tb;
-        }
-
-        private static InjectableConstructorArg CreateProperty(TypeBuilder tb, InjectableConstructorArgDefinition definition)
-        {
-            FieldBuilder fieldBuilder = tb.DefineField("_" + definition.Name, definition.PropertyType, FieldAttributes.Private);
-
-            PropertyBuilder propertyBuilder = tb.DefineProperty(definition.Name, PropertyAttributes.HasDefault, definition.PropertyType, null);
-            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + definition.Name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig,
-                definition.PropertyType, Type.EmptyTypes);
-            ILGenerator getIl = getPropMthdBldr.GetILGenerator();
-
-            getIl.Emit(OpCodes.Ldarg_0);
-            getIl.Emit(OpCodes.Ldfld, fieldBuilder);
-            getIl.Emit(OpCodes.Ret);
-
-            MethodBuilder setPropMthdBldr =
-                tb.DefineMethod("set_" + definition.Name,
-                    MethodAttributes.Private |
-                    MethodAttributes.SpecialName |
-                    MethodAttributes.HideBySig,
-                    null, new[] { definition.PropertyType });
-
-            ILGenerator setIl = setPropMthdBldr.GetILGenerator();
-            Label modifyProperty = setIl.DefineLabel();
-            Label exitSet = setIl.DefineLabel();
-
-            setIl.MarkLabel(modifyProperty);
-            setIl.Emit(OpCodes.Ldarg_0);
-            setIl.Emit(OpCodes.Ldarg_1);
-            setIl.Emit(OpCodes.Stfld, fieldBuilder);
-
-            setIl.Emit(OpCodes.Nop);
-            setIl.MarkLabel(exitSet);
-            setIl.Emit(OpCodes.Ret);
-
-            propertyBuilder.SetGetMethod(getPropMthdBldr);
-            propertyBuilder.SetSetMethod(setPropMthdBldr);
-
-            return new InjectableConstructorArg(definition.PropertyType, definition.Name, getPropMthdBldr, setPropMthdBldr);
         }
     }
 }
