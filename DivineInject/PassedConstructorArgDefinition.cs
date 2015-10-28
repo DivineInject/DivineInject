@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Emit;
 
 namespace DivineInject
 {
@@ -16,6 +17,11 @@ namespace DivineInject
         public override string ToString()
         {
             return string.Format("PassedConstructorArg(Type={0}, Index={1})", ParameterType.FullName, ParameterIndex);
+        }
+
+        public IConstructorArg Define(TypeBuilder tb)
+        {
+            return new PassedConstructorArg(ParameterType, ParameterIndex);
         }
     }
 }

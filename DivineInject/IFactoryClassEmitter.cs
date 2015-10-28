@@ -4,7 +4,7 @@ namespace DivineInject
 {
     public interface IFactoryClassEmitter
     {
-        IList<InjectableConstructorArg> EmitInjectableProperties(IList<InjectableConstructorArgDefinition> definitions);
+        IList<IConstructorArg> DefineArguments(IList<IConstructorArgDefinition> definitions);
         void EmitConstructor(IList<InjectableConstructorArg> properties);
     }
 }

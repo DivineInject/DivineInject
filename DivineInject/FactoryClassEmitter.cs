@@ -15,9 +15,9 @@ namespace DivineInject
             m_tb = GetTypeBuilder(interfaceType);    
         }
 
-        public IList<InjectableConstructorArg> EmitInjectableProperties(IList<InjectableConstructorArgDefinition> definitions)
+        public IList<IConstructorArg> DefineArguments(IList<IConstructorArgDefinition> definitions)
         {
-            return definitions.Select(d => d.CreateProperty(m_tb)).ToList();
+            return definitions.Select(d => d.Define(m_tb)).ToList();
         }
 
         public void EmitConstructor(IList<InjectableConstructorArg> properties)

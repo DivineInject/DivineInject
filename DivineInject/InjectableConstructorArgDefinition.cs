@@ -15,7 +15,7 @@ namespace DivineInject
             Name = name;
         }
 
-        public InjectableConstructorArg CreateProperty(TypeBuilder tb)
+        public IConstructorArg Define(TypeBuilder tb)
         {
             FieldBuilder fieldBuilder = tb.DefineField("_" + Name, PropertyType, FieldAttributes.Private);
 
