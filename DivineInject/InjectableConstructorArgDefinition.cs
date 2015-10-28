@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -63,7 +64,8 @@ namespace DivineInject
 
         public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
         {
-            throw new NotImplementedException();
+            return arguments.OfType<IInjectableConstructorArg>()
+                .First(a => a.Name == Name && a.PropertyType == PropertyType);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace DivineInject
 
         public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

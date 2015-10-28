@@ -69,6 +69,7 @@
     <Compile Include="DummyModel\IDomainObject.cs" />
     <Compile Include="FactoryClassFactoryTest.cs" />
     <Compile Include="FactoryMethodFactoryTest.cs" />
+    <Compile Include="InjectableConstructorArgDefinitionTest.cs" />
     <Compile Include="InstantiatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
