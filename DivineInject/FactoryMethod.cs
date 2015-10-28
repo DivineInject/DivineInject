@@ -9,6 +9,7 @@ namespace DivineInject
         ConstructorInfo Constructor { get; }
         string Name { get; }
         Type ReturnType { get; }
+        Type[] Parameters { get; }
         IList<IConstructorArgDefinition> ConstructorArgs { get; } 
     }
 
@@ -17,14 +18,16 @@ namespace DivineInject
         public ConstructorInfo Constructor { get; private set; }
         public string Name { get; private set; }
         public Type ReturnType { get; private set; }
+        public Type[] Parameters { get; private set; }
         public IList<IConstructorArgDefinition> ConstructorArgs { get; private set; } 
 
         public FactoryMethod(ConstructorInfo constructor, string name,
-            Type returnType, IList<IConstructorArgDefinition> constructorArgs)
+            Type returnType, Type[] parameters, IList<IConstructorArgDefinition> constructorArgs)
         {
             Constructor = constructor;
             Name = name;
             ReturnType = returnType;
+            Parameters = parameters;
             ConstructorArgs = constructorArgs;
         }
     }
