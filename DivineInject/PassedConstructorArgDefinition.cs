@@ -3,7 +3,13 @@ using System.Reflection.Emit;
 
 namespace DivineInject
 {
-    class PassedConstructorArgDefinition : IConstructorArgDefinition
+    public interface IPassedConstructorArgDefinition : IConstructorArgDefinition
+    {
+        Type ParameterType { get; }
+        int ParameterIndex { get; }
+    }
+
+    internal class PassedConstructorArgDefinition : IPassedConstructorArgDefinition
     {
         public PassedConstructorArgDefinition(Type parameterType, int parameterIndex)
         {
