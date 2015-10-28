@@ -9,12 +9,12 @@ namespace DivineInject
     class ClassGenerator
     {
         public TInterface Generate<TInterface, TImpl>(IList<InjectableConstructorArgDefinition> properties, 
-            IList<ConstructorArg> constructorArgs, IDivineInjector injector)
+            IList<LegacyConstructorArg> constructorArgs, IDivineInjector injector)
         {
             return (TInterface) CreateNewObject(properties, constructorArgs, typeof(TInterface), typeof(TImpl), injector);
         }
 
-        private static object CreateNewObject(IList<InjectableConstructorArgDefinition> properties, IList<ConstructorArg> constructorArgs, 
+        private static object CreateNewObject(IList<InjectableConstructorArgDefinition> properties, IList<LegacyConstructorArg> constructorArgs, 
             Type interfaceType, Type implType, IDivineInjector injector)
         {
             var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
@@ -22,7 +22,7 @@ namespace DivineInject
             return Activator.CreateInstance(myType, propertyValues);
         }
 
-        public static Type CompileResultType(IList<InjectableConstructorArgDefinition> definitions, IList<ConstructorArg> constructorArgs, Type interfaceType, Type implType)
+        public static Type CompileResultType(IList<InjectableConstructorArgDefinition> definitions, IList<LegacyConstructorArg> constructorArgs, Type interfaceType, Type implType)
         {
             TypeBuilder tb = GetTypeBuilder(interfaceType);
 
@@ -37,7 +37,7 @@ namespace DivineInject
             return objectType;
         }
 
-        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<InjectableConstructorArg> properties, IList<ConstructorArg> constructorArgs)
+        private static void CreateMethod(TypeBuilder tb, MethodInfo methodInfo, Type implType, IList<InjectableConstructorArg> properties, IList<LegacyConstructorArg> constructorArgs)
         {
             var method = tb.DefineMethod(methodInfo.Name,
                 MethodAttributes.Public |

@@ -23,7 +23,7 @@ namespace DivineInject.Test
                 .Given(generator = new ClassGenerator())
 
                 .When(instance = generator.Generate<IFactory, DomainObject>(
-                    new List<InjectableConstructorArgDefinition>(), new List<ConstructorArg>(), injector))
+                    new List<InjectableConstructorArgDefinition>(), new List<LegacyConstructorArg>(), injector))
 
                 .Then(instance, Is(AnInstance.NotNull()))
             ;
@@ -49,7 +49,7 @@ namespace DivineInject.Test
 
                 .When(instance = generator.Generate<IFactory, DomainObject>(
                     new[] { property1, property2 }, 
-                    new List<ConstructorArg>(),
+                    new List<LegacyConstructorArg>(),
                     injector))
 
                 .Then(instance, Is(AnInstance.NotNull()))
@@ -82,7 +82,7 @@ namespace DivineInject.Test
 
                 .When(instance = generator.Generate<IFactory, DomainObject>(
                     new[] { property1, property2 }, 
-                    new List<ConstructorArg>(),
+                    new List<LegacyConstructorArg>(),
                     injector))
 
                 .Then(instance, Is(AnInstance.NotNull<IFactory>()))
@@ -116,7 +116,7 @@ namespace DivineInject.Test
 
                 .When(factory = generator.Generate<IFactory, DomainObject>(
                     new[] { property1, property2 }, 
-                    new List<ConstructorArg>(),
+                    new List<LegacyConstructorArg>(),
                     injector))
                 .When(obj = factory.Create())
 
@@ -132,7 +132,7 @@ namespace DivineInject.Test
             InjectableConstructorArgDefinition property1, property2;
             IFactory factory;
             IDomainObject obj;
-            ConstructorArg constructorArg1, constructorArg2;
+            LegacyConstructorArg constructorArg1, constructorArg2;
             IDivineInjector injector;
 
             Scenario()
@@ -142,8 +142,8 @@ namespace DivineInject.Test
                     .Instance)
                 .Given(property1 = new InjectableConstructorArgDefinition(typeof(string), "Name"))
                 .Given(property2 = new InjectableConstructorArgDefinition(typeof(int), "Age"))
-                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
-                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
+                .Given(constructorArg1 = new LegacyConstructorArg(typeof(string), 0, null))
+                .Given(constructorArg2 = new LegacyConstructorArg(typeof(int), 1, null))
 
                 .Given(generator = new ClassGenerator())
 
@@ -167,7 +167,7 @@ namespace DivineInject.Test
             InjectableConstructorArgDefinition property1, property2;
             IFactoryWithArg factory;
             IDomainObject obj;
-            ConstructorArg constructorArg1, constructorArg2, constructorArg3;
+            LegacyConstructorArg constructorArg1, constructorArg2, constructorArg3;
             IDivineInjector injector;
 
             Scenario()
@@ -177,9 +177,9 @@ namespace DivineInject.Test
                     .Instance)
                 .Given(property1 = new InjectableConstructorArgDefinition(typeof(string), "Name"))
                 .Given(property2 = new InjectableConstructorArgDefinition(typeof(int), "Age"))
-                .Given(constructorArg1 = new ConstructorArg(typeof(string), 0, null))
-                .Given(constructorArg2 = new ConstructorArg(typeof(int), 1, null))
-                .Given(constructorArg3 = new ConstructorArg(typeof(string), null, 0))
+                .Given(constructorArg1 = new LegacyConstructorArg(typeof(string), 0, null))
+                .Given(constructorArg2 = new LegacyConstructorArg(typeof(int), 1, null))
+                .Given(constructorArg3 = new LegacyConstructorArg(typeof(string), null, 0))
 
                 .Given(generator = new ClassGenerator())
 

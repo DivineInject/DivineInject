@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="BindingException.cs" />
     <Compile Include="ClassGenerator.cs" />
-    <Compile Include="ConstructorArg.cs" />
+    <Compile Include="LegacyConstructorArg.cs" />
     <Compile Include="DivineInjector.cs" />
     <Compile Include="FactoryClass.cs" />
     <Compile Include="FactoryClassEmitter.cs" />

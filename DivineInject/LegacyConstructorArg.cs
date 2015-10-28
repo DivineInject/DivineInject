@@ -2,9 +2,9 @@
 
 namespace DivineInject
 {
-    class ConstructorArg
+    class LegacyConstructorArg
     {
-        public ConstructorArg(Type argType, int? propertyIndex, int? parameterIndex)
+        public LegacyConstructorArg(Type argType, int? propertyIndex, int? parameterIndex)
         {
             ArgType = argType;
             PropertyIndex = propertyIndex;
