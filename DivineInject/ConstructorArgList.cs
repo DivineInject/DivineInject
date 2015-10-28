@@ -13,12 +13,10 @@ namespace DivineInject
     {
         private readonly TypeBuilder m_tb;
 
-        public ConstructorArgList(TypeBuilder tb, params IConstructorArgDefinition[] definitions)
+        public ConstructorArgList(TypeBuilder tb)
         {
             m_tb = tb;
             Arguments = new List<IConstructorArg>();
-            foreach (var defn in definitions)
-                Add(defn);
         }
 
         public void Add(IConstructorArgDefinition defn)

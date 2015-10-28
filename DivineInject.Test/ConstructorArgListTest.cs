@@ -32,7 +32,9 @@ namespace DivineInject.Test
                     .WhereMethod(d => d.FindExisting(ArgIsAny<IList<IConstructorArg>>())).ReturnsNull()
                     .WhereMethod(d => d.Define(ArgIsAny<TypeBuilder>())).Returns(arg1)
                     .Instance)
-                .Given(argList = new ConstructorArgList(null, argDef1))
+                .Given(argList = new ConstructorArgList(null))
+
+                .When(() => argList.Add(argDef1))
 
                 .Then(argList.Arguments, Is(AList.InOrder().WithOnly(AnInstance.SameAs(arg1))));
         }
@@ -50,7 +52,9 @@ namespace DivineInject.Test
                     .WhereMethod(d => d.FindExisting(ArgIsAny<IList<IConstructorArg>>())).ReturnsNull()
                     .WhereMethod(d => d.Define(ArgIsAny<TypeBuilder>())).Returns(arg1)
                     .Instance)
-                .Given(argList = new ConstructorArgList(null, argDef1))
+                .Given(argList = new ConstructorArgList(null))
+            
+                .When(() => argList.Add(argDef1))
 
                 .Then(argList.Arguments, Is(AList.InOrder().WithOnly(AnInstance.SameAs(arg1))));
         }
@@ -68,7 +72,10 @@ namespace DivineInject.Test
                     .WhereMethod(d => d.FindExisting(ArgIsAny<IList<IConstructorArg>>())).ReturnsInSequence(null, arg1)
                     .WhereMethod(d => d.Define(ArgIsAny<TypeBuilder>())).Returns(arg1)
                     .Instance)
-                .Given(argList = new ConstructorArgList(null, argDef1, argDef1))
+                .Given(argList = new ConstructorArgList(null))
+
+                .When(() => argList.Add(argDef1))
+                .When(() => argList.Add(argDef1))
 
                 .Then(argList.Arguments, Is(AList.InOrder().WithOnly(AnInstance.SameAs(arg1))));
         }
