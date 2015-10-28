@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="BindingException.cs" />
     <Compile Include="ClassGenerator.cs" />
+    <Compile Include="IConstructorArg.cs" />
     <Compile Include="LegacyConstructorArg.cs" />
     <Compile Include="DivineInjector.cs" />
     <Compile Include="FactoryClass.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="InjectableConstructorArg.cs" />
     <Compile Include="InjectableConstructorArgDefinition.cs" />
     <Compile Include="Instantiator.cs" />
+    <Compile Include="PassedConstructorArg.cs" />
     <Compile Include="PassedConstructorArgDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
