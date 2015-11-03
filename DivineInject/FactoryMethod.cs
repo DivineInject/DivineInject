@@ -13,7 +13,8 @@ namespace DivineInject
         Type ReturnType { get; }
         Type ReturnImplType { get; }
         Type[] ParameterTypes { get; }
-        IList<IConstructorArgDefinition> ConstructorArgs { get; } 
+        IList<IConstructorArgDefinition> ConstructorArgs { get; }
+        void EmitMethod(TypeBuilder tb, IConstructorArgList constructorArgList);
     }
 
     internal class FactoryMethod : IFactoryMethod

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection.Emit;
 using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
@@ -41,10 +42,9 @@ namespace DivineInject.Test
                     .Instance)
                 .Given(classFactory = new FactoryClassFactory(methodFactory))
 
-                .When(createdClass = classFactory.Create(
-                    typeof(IFactoryInterfaceWithTwoMethods),
+                .When(createdClass = classFactory.Create(typeof(IFactoryInterfaceWithTwoMethods),
                     injector,
-                    typeof(DomainObjectWithDependencyAndArg)))
+                    typeof(DomainObjectWithDependencyAndArg), new ConstructorArgList(null)))
 
                 .Then(createdClass.Methods, Is(AList.InOrder().WithOnly(
                     AnInstance.SameAs(method1),

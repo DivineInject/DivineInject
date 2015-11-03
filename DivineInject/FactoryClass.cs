@@ -11,12 +11,7 @@ namespace DivineInject
         private readonly IConstructorArgList m_argList;
         public IList<IFactoryMethod> Methods { get; private set; }
 
-        public FactoryClass(TypeBuilder tb, IList<IFactoryMethod> methods)
-            : this(new ConstructorArgList(tb), methods)
-        {
-        }
-
-        internal FactoryClass(IConstructorArgList argList, IList<IFactoryMethod> methods)
+        public FactoryClass(IConstructorArgList argList, IList<IFactoryMethod> methods)
         {
             m_argList = argList;
             Methods = methods;

@@ -6,49 +6,34 @@ using System.Reflection.Emit;
 
 namespace DivineInject
 {
-    internal class FactoryClassEmitter : IFactoryClassEmitter
+    internal class FactoryClassEmitter 
     {
+        private readonly Type m_interfaceType;
+        private readonly IDivineInjector m_injector;
+        private readonly Type m_domainObjectType;
         private readonly TypeBuilder m_tb;
+        private readonly FactoryClassFactory m_factoryClassFactory;
 
-        public FactoryClassEmitter(Type interfaceType)
+        public FactoryClassEmitter(IDivineInjector injector, Type interfaceType, Type domainObjectType)
         {
-            m_tb = GetTypeBuilder(interfaceType);    
+            m_interfaceType = interfaceType;
+            m_injector = injector;
+            m_domainObjectType = domainObjectType;
+            m_tb = GetTypeBuilder(interfaceType);
+            m_factoryClassFactory = new FactoryClassFactory(new FactoryMethodFactory());
         }
 
-        public IList<IConstructorArg> DefineArguments(IList<IConstructorArgDefinition> definitions)
+        public Type CompileResultType()
         {
-            return definitions.Select(d => d.Define(m_tb)).ToList();
-        }
+            var constructorArgList = new ConstructorArgList(m_tb);
+            var factoryClass = m_factoryClassFactory.Create(m_interfaceType, m_injector, m_domainObjectType, constructorArgList);
 
-        public void EmitConstructor(IList<InjectableConstructorArg> properties)
-        {
-            var constructor = m_tb.DefineConstructor(
-                MethodAttributes.Public |
-                MethodAttributes.SpecialName |
-                MethodAttributes.RTSpecialName,
-                CallingConventions.Standard,
-                properties.Select(p => p.PropertyType).ToArray());
+            factoryClass.EmitConstructor(m_tb);
 
-            var conObj = typeof(object).GetConstructor(new Type[0]);
+            foreach (var method in factoryClass.Methods)
+                method.EmitMethod(m_tb, constructorArgList);
 
-            ILGenerator il = constructor.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Call, conObj);
-            il.Emit(OpCodes.Nop);
-            il.Emit(OpCodes.Nop);
-
-            for (var i = 0; i < properties.Count; i++)
-            {
-                var property = properties[i];
-
-                il.Emit(OpCodes.Ldarg_0);
-                il.Emit(OpCodes.Ldarg, i + 1);
-                il.Emit(OpCodes.Call, property.Setter);
-                il.Emit(OpCodes.Nop);
-            }
-
-            il.Emit(OpCodes.Nop);
-            il.Emit(OpCodes.Ret);
+            return m_tb.CreateType();
         }
 
         private static TypeBuilder GetTypeBuilder(Type interfaceType)
