@@ -7,6 +7,7 @@ namespace DivineInject
     {
         void Add(IConstructorArgDefinition defn);
         IList<IConstructorArg> Arguments { get; }
+        IConstructorArg FindExisting(IConstructorArgDefinition defn);
     }
 
     internal class ConstructorArgList : IConstructorArgList
@@ -19,12 +20,17 @@ namespace DivineInject
             Arguments = new List<IConstructorArg>();
         }
 
+        public IList<IConstructorArg> Arguments { get; private set; } 
+
         public void Add(IConstructorArgDefinition defn)
         {
-            if (defn.FindExisting(Arguments) == null)
+            if (FindExisting(defn) == null)
                 Arguments.Add(defn.Define(m_tb));
         }
 
-        public IList<IConstructorArg> Arguments { get; private set; } 
+        public IConstructorArg FindExisting(IConstructorArgDefinition defn)
+        {
+            return defn.FindExisting(Arguments);
+        }
     }
 }
