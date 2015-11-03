@@ -35,10 +35,40 @@ namespace DivineInject.Test
                 .Then(obj.Database, Is(AnInstance.SameAs(database)))
             ;
         }
+
+        [Test]
+        public void CreatesFactoryForDomainObjectWithPassedArgument()
+        {
+            FactoryClassEmitter emitter;
+            ICreateDomainObjectWithSingleArgConstructor factory;
+            IDivineInjector injector;
+            DomainObjectWithSingleArgConstructor obj;
+
+            Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
+                .Given(emitter = new FactoryClassEmitter(
+                    injector,
+                    typeof(ICreateDomainObjectWithSingleArgConstructor),
+                    typeof(DomainObjectWithSingleArgConstructor)))
+
+                .When(factory = (ICreateDomainObjectWithSingleArgConstructor)emitter.CreateNewObject())
+                .When(obj = factory.Create("bob"))
+
+                .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.Name, Is(AString.EqualTo("bob")))
+            ;
+        }
     }
 
     public interface ICreateDomainObjectWithOneDependency
     {
         DomainObjectWithOneDependency Create();
+    }
+
+    public interface ICreateDomainObjectWithSingleArgConstructor
+    {
+        DomainObjectWithSingleArgConstructor Create(string name);
     }
 }

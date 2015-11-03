@@ -47,8 +47,8 @@ namespace DivineInject
 
         private static TypeBuilder GetTypeBuilder(Type interfaceType)
         {
-            var typeSignature = "MyDynamicType";
-            var an = new AssemblyName(typeSignature);
+            var typeSignature = interfaceType.Name + "Factory";
+            var an = new AssemblyName("Divine.Inject.Generated");
             var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
             var moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
             var tb = moduleBuilder.DefineType(typeSignature

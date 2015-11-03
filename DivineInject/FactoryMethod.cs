@@ -63,19 +63,19 @@ namespace DivineInject
             il.Emit(OpCodes.Nop);
             foreach (var arg in ConstructorArgs)
             {
-                var passedArgument = constructorArgList.FindExisting(arg);
-                if (passedArgument is IInjectableConstructorArg)
+                if (arg is IInjectableConstructorArgDefinition)
                 {
+                    var passedArgument = constructorArgList.FindExisting(arg);
                     il.Emit(OpCodes.Ldarg_0);
                     il.Emit(OpCodes.Call, ((IInjectableConstructorArg)passedArgument).Getter);
                 }
-                else if (passedArgument is IPassedConstructorArg)
+                else if (arg is IPassedConstructorArgDefinition)
                 {
-                    il.Emit(OpCodes.Ldarg, ((IPassedConstructorArg) passedArgument).ParameterIndex + 1);
+                    il.Emit(OpCodes.Ldarg, ((IPassedConstructorArgDefinition) arg).ParameterIndex + 1);
                 }
                 else
                 {
-                    throw new Exception("Unrecognised type of argument: " + passedArgument.GetType().FullName);
+                    throw new Exception("Unrecognised type of argument: " + arg.GetType().FullName);
                 }
             }
 

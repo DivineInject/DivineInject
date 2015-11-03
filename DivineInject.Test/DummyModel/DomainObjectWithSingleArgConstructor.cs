@@ -2,8 +2,10 @@ using System;
 
 namespace DivineInject.Test.DummyModel
 {
-    internal class DomainObjectWithSingleArgConstructor : IDomainObject
+    public class DomainObjectWithSingleArgConstructor : IDomainObject
     {
+        public string Name { get; set; }
+
         public DomainObjectWithSingleArgConstructor()
         {
             throw new NotImplementedException();
@@ -11,7 +13,7 @@ namespace DivineInject.Test.DummyModel
 
         public DomainObjectWithSingleArgConstructor(string name)
         {
-            
+            Name = name;
         }
     }
 }
