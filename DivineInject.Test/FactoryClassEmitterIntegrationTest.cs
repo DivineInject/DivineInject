@@ -60,6 +60,36 @@ namespace DivineInject.Test
                 .Then(obj.Name, Is(AString.EqualTo("bob")))
             ;
         }
+
+        [Test]
+        public void CreatesFactoryForDomainObjectWithInjectedDependencyAndArgument()
+        {
+            FactoryClassEmitter emitter;
+            ICreateDomainObjectWithDependencyAndArg factory;
+            IDivineInjector injector;
+            IDatabase database;
+            DomainObjectWithDependencyAndArg obj;
+
+            Scenario()
+                .Given(database = AMock<IDatabase>().Instance)
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(IDatabase))).Returns(true)
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .WhereMethod(i => i.Get(typeof(IDatabase))).Returns(database)
+                    .Instance)
+                .Given(emitter = new FactoryClassEmitter(
+                    injector,
+                    typeof(ICreateDomainObjectWithDependencyAndArg),
+                    typeof(DomainObjectWithDependencyAndArg)))
+
+                .When(factory = (ICreateDomainObjectWithDependencyAndArg) emitter.CreateNewObject())
+                .When(obj = factory.Create("Fred"))
+
+                .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.Database, Is(AnInstance.SameAs(database)))
+                .Then(obj.Name, Is(AString.EqualTo("Fred")))
+            ;
+        }
     }
 
     public interface ICreateDomainObjectWithOneDependency
@@ -70,5 +100,10 @@ namespace DivineInject.Test
     public interface ICreateDomainObjectWithSingleArgConstructor
     {
         DomainObjectWithSingleArgConstructor Create(string name);
+    }
+
+    public interface ICreateDomainObjectWithDependencyAndArg
+    {
+        DomainObjectWithDependencyAndArg Create(string name);
     }
 }
