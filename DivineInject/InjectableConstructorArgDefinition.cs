@@ -8,28 +8,27 @@ namespace DivineInject
 {
     public interface IInjectableConstructorArgDefinition : IConstructorArgDefinition
     {
-        Type PropertyType { get; }
         string Name { get; }
     }
 
     public class InjectableConstructorArgDefinition : IInjectableConstructorArgDefinition
     {
-        public InjectableConstructorArgDefinition(Type propertyType, string name)
+        public InjectableConstructorArgDefinition(Type parameterType, string name)
         {
-            PropertyType = propertyType;
+            ParameterType = parameterType;
             Name = name;
         }
 
-        public Type PropertyType { get; private set; }
+        public Type ParameterType { get; private set; }
         public string Name { get; private set; }
 
         public IConstructorArg Define(TypeBuilder tb)
         {
-            FieldBuilder fieldBuilder = tb.DefineField("_" + Name, PropertyType, FieldAttributes.Private);
+            FieldBuilder fieldBuilder = tb.DefineField("_" + Name, ParameterType, FieldAttributes.Private);
 
-            PropertyBuilder propertyBuilder = tb.DefineProperty(Name, PropertyAttributes.HasDefault, PropertyType, null);
+            PropertyBuilder propertyBuilder = tb.DefineProperty(Name, PropertyAttributes.HasDefault, ParameterType, null);
             MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + Name, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig,
-                PropertyType, Type.EmptyTypes);
+                ParameterType, Type.EmptyTypes);
             ILGenerator getIl = getPropMthdBldr.GetILGenerator();
 
             getIl.Emit(OpCodes.Ldarg_0);
@@ -41,7 +40,7 @@ namespace DivineInject
                     MethodAttributes.Private |
                     MethodAttributes.SpecialName |
                     MethodAttributes.HideBySig,
-                    null, new[] { PropertyType });
+                    null, new[] { ParameterType });
 
             ILGenerator setIl = setPropMthdBldr.GetILGenerator();
             Label modifyProperty = setIl.DefineLabel();
@@ -59,13 +58,13 @@ namespace DivineInject
             propertyBuilder.SetGetMethod(getPropMthdBldr);
             propertyBuilder.SetSetMethod(setPropMthdBldr);
 
-            return new InjectableConstructorArg(PropertyType, Name, getPropMthdBldr, setPropMthdBldr);
+            return new InjectableConstructorArg(ParameterType, Name, getPropMthdBldr, setPropMthdBldr);
         }
 
         public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
         {
             return arguments.OfType<IInjectableConstructorArg>()
-                .First(a => a.Name == Name && a.PropertyType == PropertyType);
+                .First(a => a.Name == Name && a.PropertyType == ParameterType);
         }
     }
 }

@@ -2,7 +2,13 @@
 
 namespace DivineInject
 {
-    class PassedConstructorArg : IConstructorArg
+    internal interface IPassedConstructorArg : IConstructorArg
+    {
+        Type ParameterType { get; }
+        int ParameterIndex { get; }
+    }
+
+    internal class PassedConstructorArg : IPassedConstructorArg
     {
         public PassedConstructorArg(Type parameterType, int parameterIndex)
         {

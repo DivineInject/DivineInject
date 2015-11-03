@@ -24,7 +24,7 @@ namespace DivineInject.Test
 
         public AnInjectableConstructorArgDefinition PropertyType(IMatcher<Type> propertyType)
         {
-            WithProperty(() => PropertyNames.PropertyType, propertyType);
+            WithProperty(() => PropertyNames.ParameterType, propertyType);
             return this;
         }
 

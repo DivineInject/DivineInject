@@ -6,7 +6,6 @@ namespace DivineInject
 {
     public interface IPassedConstructorArgDefinition : IConstructorArgDefinition
     {
-        Type ParameterType { get; }
         int ParameterIndex { get; }
     }
 
