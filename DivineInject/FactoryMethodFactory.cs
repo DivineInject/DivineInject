@@ -14,7 +14,11 @@ namespace DivineInject
         public IFactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType)
         {
             var methodArgs = method.GetParameters();
-            var constructors = domainObjectType.GetConstructors().Where(cons => ConstructorCanBeCalled(cons, methodArgs, injector));
+            var constructors = domainObjectType.GetConstructors()
+                .Where(cons => ConstructorCanBeCalled(cons, methodArgs, injector))
+                .ToList();
+            if (constructors.Count() > 1)
+                throw new Exception("Multiple callable constructors found in target type " + domainObjectType);
             var constructor = constructors.SingleOrDefault();
             if (constructor == null)
                 throw new Exception(

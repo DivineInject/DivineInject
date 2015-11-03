@@ -17,9 +17,9 @@ namespace DivineInject
         private static object CreateNewObject(IList<InjectableConstructorArgDefinition> properties, IList<LegacyConstructorArg> constructorArgs, 
             Type interfaceType, Type implType, IDivineInjector injector)
         {
-            var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
-            var propertyValues = properties.Select(p => injector.Get(p.ParameterType)).ToArray();
-            return Activator.CreateInstance(myType, propertyValues);
+                var myType = CompileResultType(properties, constructorArgs, interfaceType, implType);
+                var propertyValues = properties.Select(p => injector.Get(p.ParameterType)).ToArray();
+                return Activator.CreateInstance(myType, propertyValues);
         }
 
         public static Type CompileResultType(IList<InjectableConstructorArgDefinition> definitions, IList<LegacyConstructorArg> constructorArgs, Type interfaceType, Type implType)

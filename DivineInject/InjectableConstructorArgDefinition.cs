@@ -64,7 +64,7 @@ namespace DivineInject
         public IConstructorArg FindExisting(IList<IConstructorArg> arguments)
         {
             return arguments.OfType<IInjectableConstructorArg>()
-                .First(a => a.Name == Name && a.PropertyType == ParameterType);
+                .FirstOrDefault(a => a.Name == Name && a.PropertyType == ParameterType);
         }
     }
 }

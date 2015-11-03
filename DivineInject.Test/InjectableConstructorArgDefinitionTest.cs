@@ -1,4 +1,5 @@
-﻿using DivineInject.Test.DummyModel;
+﻿using System.Collections.Generic;
+using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
@@ -14,6 +15,7 @@ namespace DivineInject.Test
             InjectableConstructorArgDefinition definition;
             IInjectableConstructorArg arg1;
             IConstructorArg resut;
+
             Scenario()
                 .Given(arg1 = AMock<IInjectableConstructorArg>()
                     .WhereGet(a => a.Name).Returns("database")
@@ -25,6 +27,20 @@ namespace DivineInject.Test
                 .When(resut = definition.FindExisting(new[] {arg1}))
 
                 .Then(resut, Is(AnInstance.SameAs((IConstructorArg) arg1)));
+        }
+
+        [Test]
+        public void FindExisting_ReturnsNullInCaseNotAlreadyDefined()
+        {
+            InjectableConstructorArgDefinition definition;
+            IConstructorArg resut;
+
+            Scenario()
+                .Given(definition = new InjectableConstructorArgDefinition(typeof(IDatabase), "database"))
+
+                .When(resut = definition.FindExisting(new List<IConstructorArg>()))
+
+                .Then(resut, Is(AnInstance.Null<IConstructorArg>()));
         }
     }
 }

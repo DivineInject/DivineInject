@@ -47,18 +47,15 @@ namespace DivineInject
                 MethodAttributes.Final,
                 CallingConventions.Standard,
                 ReturnType,
-                ConstructorArgs.Select(a => a.ParameterType).ToArray()
+                ConstructorArgs.OfType<IPassedConstructorArgDefinition>().Select(a => a.ParameterType).ToArray()
                 );
 
-            var consArgs = ConstructorArgs
-                .OfType<IPassedConstructorArgDefinition>()
-                .Select(d => d.ParameterType)
-                .ToArray();
+            var consArgTypes = ConstructorArgs.Select(a => a.ParameterType).ToArray();
 
-            var conObj = ReturnImplType.GetConstructor(consArgs);
+            var conObj = ReturnImplType.GetConstructor(consArgTypes);
 
             if (conObj == null)
-                throw new Exception("Failed to find constructor of type " + ReturnImplType.FullName + " with arguments: " + string.Join(", ", consArgs.Select(a => a.FullName)));
+                throw new Exception("Failed to find constructor of type " + ReturnImplType.FullName + " with arguments: " + string.Join(", ", consArgTypes.Select(a => a.FullName)));
 
             ILGenerator il = method.GetILGenerator();
             il.DeclareLocal(ReturnImplType);

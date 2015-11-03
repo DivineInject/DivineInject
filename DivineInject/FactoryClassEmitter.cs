@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -23,9 +22,19 @@ namespace DivineInject
             m_factoryClassFactory = new FactoryClassFactory(new FactoryMethodFactory());
         }
 
-        public Type CompileResultType()
+        public object CreateNewObject()
         {
             var constructorArgList = new ConstructorArgList(m_tb);
+            var myType = CompileResultType(constructorArgList);
+            var propertyValues = constructorArgList.Arguments
+                .OfType<IInjectableConstructorArg>()
+                .Select(a => m_injector.Get(a.PropertyType))
+                .ToArray();
+            return Activator.CreateInstance(myType, propertyValues);
+        }
+
+        private Type CompileResultType(ConstructorArgList constructorArgList)
+        {
             var factoryClass = m_factoryClassFactory.Create(m_interfaceType, m_injector, m_domainObjectType, constructorArgList);
 
             factoryClass.EmitConstructor(m_tb);

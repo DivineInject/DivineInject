@@ -1,6 +1,6 @@
 ﻿namespace DivineInject.Test.DummyModel
 {
-    internal class IDomainObject
+    public class IDomainObject
     {
     }
 }

@@ -1,9 +1,12 @@
 namespace DivineInject.Test.DummyModel
 {
-    internal class DomainObjectWithOneDependency : IDomainObject
+    public class DomainObjectWithOneDependency : IDomainObject
     {
+        public IDatabase Database { get; set; }
+
         public DomainObjectWithOneDependency(IDatabase database)
         {
+            Database = database;
         }
     }
 }
