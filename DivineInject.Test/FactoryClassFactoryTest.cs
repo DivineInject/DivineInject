@@ -39,7 +39,7 @@ namespace DivineInject.Test
                         typeof(DomainObjectWithDependencyAndArg)))
                         .Returns(method2)
                     .Instance)
-                .Given(classFactory = new FactoryClassFactory(null, methodFactory))
+                .Given(classFactory = new FactoryClassFactory(methodFactory))
 
                 .When(createdClass = classFactory.Create(
                     typeof(IFactoryInterfaceWithTwoMethods),
