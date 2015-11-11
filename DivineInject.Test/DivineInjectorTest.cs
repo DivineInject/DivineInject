@@ -53,6 +53,24 @@ namespace DivineInject.Test
                 .Then(injector.IsBound(typeof(string)), IsFalse())
             ;
         }
+
+        [Test]
+        public void BindsAndInstantiatesDependenciesWithDependencies()
+        {
+            DivineInjector injector;
+            IOrderService service;
+
+            Scenario()
+                .Given(injector = new DivineInjector())
+                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
+                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+
+                .When(service = injector.Get<IOrderService>())
+
+                .Then(service, Is(AnInstance.NotNull()))
+                .Then(((OrderService) service).DatabaseProvider, Is(AnInstance.NotNull()))
+            ;
+        }
     }
 
     public interface IDatabaseProvider
@@ -60,4 +78,17 @@ namespace DivineInject.Test
 
     public class DatabaseProvider : IDatabaseProvider
     { }
+
+    public interface IOrderService
+    { }
+
+    public class OrderService : IOrderService
+    {
+        public IDatabaseProvider DatabaseProvider { get; private set; }
+
+        public OrderService(IDatabaseProvider databaseProvider)
+        {
+            DatabaseProvider = databaseProvider;
+        }
+    }
 }
