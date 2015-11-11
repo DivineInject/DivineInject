@@ -71,6 +71,26 @@ namespace DivineInject.Test
                 .Then(((OrderService) service).DatabaseProvider, Is(AnInstance.NotNull()))
             ;
         }
+
+        [Test]
+        public void BindsAndInstantiatesDependencyViaFactoryInterface()
+        {
+            DivineInjector injector;
+            User.IFactory userFactory;
+            IUser user;
+
+            Scenario()
+                .Given(injector = new DivineInjector())
+                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
+                .Given(() => injector.BindFactory<User.IFactory>().For<User>())
+
+                .When(userFactory = injector.Get<User.IFactory>())
+                .When(user = userFactory.Create("Helen"))
+
+                .Then(user.Name, Is(AString.EqualTo("Helen")))
+                .Then(((User)user).DatabaseProvider, Is(AnInstance.NotNull()))
+            ;
+        }
     }
 
     public interface IDatabaseProvider
@@ -89,6 +109,28 @@ namespace DivineInject.Test
         public OrderService(IDatabaseProvider databaseProvider)
         {
             DatabaseProvider = databaseProvider;
+        }
+    }
+
+    public interface IUser
+    {
+        string Name { get; }
+    }
+
+    public class User : IUser
+    {
+        public User(string name, IDatabaseProvider databaseProvider)
+        {
+            Name = name;
+            DatabaseProvider = databaseProvider;
+        }
+
+        public string Name { get; private set; }
+        public IDatabaseProvider DatabaseProvider { get; private set; }
+
+        public interface IFactory
+        {
+            IUser Create(string name);
         }
     }
 }

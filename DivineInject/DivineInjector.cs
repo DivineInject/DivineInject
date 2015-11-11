@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using DivineInject.FactoryGenerator;
 
 namespace DivineInject
 {
-    public interface IBindingBuilder<TInterface>
+    public interface IBindingBuilder
     {
         IDivineInjector To<TImpl>()
-                where TImpl : class;
+            where TImpl : class;
+    }
+
+    public interface IBindingFactoryBuilder
+    {
+        IDivineInjector For<TImpl>()
+            where TImpl : class;
     }
 
     public interface IDivineInjector
     {
-        IBindingBuilder<T> Bind<T>();
+        IBindingBuilder Bind<T>();
         T Get<T>();
         object Get(Type type);
         bool IsBound(Type type);
@@ -19,17 +26,22 @@ namespace DivineInject
 
     class DivineInjector : IDivineInjector
     {
-        private Instantiator m_instantiator;
-        private IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
+        private readonly Instantiator m_instantiator;
+        private readonly IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
 
         public DivineInjector()
         {
             m_instantiator = new Instantiator(this);
         }
 
-        public IBindingBuilder<T> Bind<T>()
+        public IBindingBuilder Bind<T>()
         {
             return new BindingBuilder<T>(this);
+        }
+
+        public IBindingFactoryBuilder BindFactory<T>()
+        {
+            return new BindingFactoryBuilder<T>(this);
         }
 
         public T Get<T>()
@@ -57,9 +69,17 @@ namespace DivineInject
             m_bindings.Add(typeof(TInterface), impl);
         }
 
-        private class BindingBuilder<TInterface> : IBindingBuilder<TInterface>
+        private void AddFactoryBinding<TInterface, TImpl>()
+            where TImpl : class
         {
-            private DivineInjector m_injector;
+            var emitter = new FactoryClassEmitter(this, typeof(TInterface), typeof(TImpl));
+            var factory = emitter.CreateNewObject();
+            m_bindings.Add(typeof(TInterface), factory);
+        }
+
+        private class BindingBuilder<TInterface> : IBindingBuilder
+        {
+            private readonly DivineInjector m_injector;
 
             internal BindingBuilder(DivineInjector injector)
             {
@@ -70,6 +90,23 @@ namespace DivineInject
                 where TImpl : class
             {
                 m_injector.AddBinding<TInterface, TImpl>();
+                return m_injector;
+            }
+        }
+
+        private class BindingFactoryBuilder<TInterface> : IBindingFactoryBuilder
+        {
+            private readonly DivineInjector m_injector;
+
+            internal BindingFactoryBuilder(DivineInjector injector)
+            {
+                m_injector = injector;
+            }
+
+            public IDivineInjector For<TImpl>() 
+                where TImpl : class
+            {
+                m_injector.AddFactoryBinding<TInterface, TImpl>();
                 return m_injector;
             }
         }
