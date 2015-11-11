@@ -140,7 +140,6 @@ namespace DivineInject.Test
         }
 
         [Test]
-        [Ignore("wip")]
         public void CreatesFactoryForDomainObjectWithConstructorWithTwoArgsOfSameType()
         {
             FactoryClassEmitter emitter;
