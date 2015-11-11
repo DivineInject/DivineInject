@@ -57,7 +57,6 @@
     <Compile Include="AnInjectableConstructorArgDefinition.cs" />
     <Compile Include="APassedConstructorArgDefinition.cs" />
     <Compile Include="AType.cs" />
-    <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="ConstructorArgListTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
     <Compile Include="DummyModel\DomainObjectWithConstructorWithTwoArgsOfSameType.cs" />

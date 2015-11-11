@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingException.cs" />
-    <Compile Include="ClassGenerator.cs" />
     <Compile Include="ConstructorArgList.cs" />
     <Compile Include="IConstructorArg.cs" />
     <Compile Include="LegacyConstructorArg.cs" />
