@@ -11,15 +11,15 @@ namespace DivineInject.Test
         public void BindsInterfaceToImplementationAndInstantiates()
         {
             DivineInjector injector;
-            IOrderService instance;
+            IDatabaseProvider instance;
 
             Scenario()
                 .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
-                .When(instance = injector.Get<IOrderService>())
+                .When(instance = injector.Get<IDatabaseProvider>())
 
-                .Then(instance, Is(AnInstance.OfType<OrderService>()))
+                .Then(instance, Is(AnInstance.OfType<DatabaseProvider>()))
             ;
         }
 
@@ -27,14 +27,14 @@ namespace DivineInject.Test
         public void MultipleRequestsForSameInterfaceYieldSameObject()
         {
             DivineInjector injector;
-            IOrderService instance1, instance2;
+            IDatabaseProvider instance1, instance2;
 
             Scenario()
                 .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
-                .When(instance1 = injector.Get<IOrderService>())
-                .When(instance2 = injector.Get<IOrderService>())
+                .When(instance1 = injector.Get<IDatabaseProvider>())
+                .When(instance2 = injector.Get<IDatabaseProvider>())
 
                 .Then(instance1, Is(AnInstance.SameAs(instance2)))
             ;
@@ -47,17 +47,17 @@ namespace DivineInject.Test
 
             Scenario()
                 .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
-                .Then(injector.IsBound(typeof(IOrderService)), IsTrue())
+                .Then(injector.IsBound(typeof(IDatabaseProvider)), IsTrue())
                 .Then(injector.IsBound(typeof(string)), IsFalse())
             ;
         }
     }
 
-    public interface IOrderService
+    public interface IDatabaseProvider
     { }
 
-    public class OrderService : IOrderService
+    public class DatabaseProvider : IDatabaseProvider
     { }
 }
