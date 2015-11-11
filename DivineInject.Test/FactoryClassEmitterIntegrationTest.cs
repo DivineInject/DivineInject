@@ -112,6 +112,32 @@ namespace DivineInject.Test
                 .Then(obj.Name, Is(AString.EqualTo("Fred")))
             ;
         }
+
+        [Test]
+        public void CreatesFactoryForDomainObjectTwoConstructors()
+        {
+            FactoryClassEmitter emitter;
+            ICreateDomainObjectWithTwoConstructors factory;
+            IDivineInjector injector;
+            DomainObjectWithTwoConstructors objWithDefaultName, objWithSpecificName;
+
+            Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
+                .Given(emitter = new FactoryClassEmitter(
+                    injector,
+                    typeof(ICreateDomainObjectWithTwoConstructors),
+                    typeof(DomainObjectWithTwoConstructors)))
+
+                .When(factory = (ICreateDomainObjectWithTwoConstructors)emitter.CreateNewObject())
+                .When(objWithDefaultName = factory.CreateWithDefaultName())
+                .When(objWithSpecificName = factory.CreateWithName("Bob"))
+
+                .Then(objWithSpecificName.Name, Is(AString.EqualTo("Bob")))
+                .Then(objWithDefaultName.Name, Is(AString.EqualTo("Fred")))
+            ;
+        }
     }
 
     public interface ICreateDomainObjectWithDefaultConstructor
@@ -132,5 +158,11 @@ namespace DivineInject.Test
     public interface ICreateDomainObjectWithDependencyAndArg
     {
         DomainObjectWithDependencyAndArg Create(string name);
+    }
+
+    public interface ICreateDomainObjectWithTwoConstructors
+    {
+        DomainObjectWithTwoConstructors CreateWithDefaultName();
+        DomainObjectWithTwoConstructors CreateWithName(string name);
     }
 }
