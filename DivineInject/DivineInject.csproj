@@ -42,6 +42,7 @@
     <Compile Include="BindingException.cs" />
     <Compile Include="ConstructorArgList.cs" />
     <Compile Include="IConstructorArg.cs" />
+    <Compile Include="IConstructorArgList.cs" />
     <Compile Include="LegacyConstructorArg.cs" />
     <Compile Include="DivineInjector.cs" />
     <Compile Include="FactoryClass.cs" />
