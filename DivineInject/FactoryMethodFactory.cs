@@ -44,10 +44,15 @@ namespace DivineInject
 
         private int MethodArgIndex(ParameterInfo param, MethodInfo method)
         {
-            var matchingArgInMethod = method.GetParameters().FirstOrDefault(p => p.ParameterType == param.ParameterType);
-            if (matchingArgInMethod == null)
+            var matchingArgsOfCorrectType = method.GetParameters().Where(p => p.ParameterType == param.ParameterType).ToList();
+            if (!matchingArgsOfCorrectType.Any())
                 throw new Exception("Failed to match constructor arg with arg in method");
-            return matchingArgInMethod.Position;
+            if (matchingArgsOfCorrectType.Count == 1)
+                return matchingArgsOfCorrectType.First().Position;
+            var firstByName = matchingArgsOfCorrectType.FirstOrDefault(p => p.Name == param.Name);
+            if (firstByName != null)
+                return firstByName.Position;
+            throw new Exception(string.Format("Failed to wire up parameter in method named {0} because there are multiple arguments of the same type and none of the constructor arguments have the same name", param.Name));
         }
 
         private string GetPropertyName(string name)

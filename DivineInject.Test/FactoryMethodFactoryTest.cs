@@ -137,6 +137,39 @@ namespace DivineInject.Test
         }
 
         [Test]
+        public void CreatesFactoryMethodForMethodWithTwoArgsOfSameType()
+        {
+            FactoryMethodFactory factoryMethodFactory;
+            MethodInfo methodInfo;
+            IDivineInjector injector;
+            IFactoryMethod factoryMethod;
+            Type domainObjectType;
+            ConstructorInfo expectedConstructor;
+
+            Scenario()
+                .Given(factoryMethodFactory = new FactoryMethodFactory())
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithTwoArgsOfSameType"))
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
+                .Given(domainObjectType = typeof(DomainObjectWithConstructorWithTwoArgsOfSameType))
+                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(string), typeof(string) }))
+
+                .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
+
+                .Then(factoryMethod.Constructor, Is(AnInstance.SameAs(expectedConstructor)))
+                .Then(factoryMethod.Name, Is(AString.EqualTo("MethodWithTwoArgsOfSameType")))
+                .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(DomainObjectWithConstructorWithTwoArgsOfSameType))))
+                .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithConstructorWithTwoArgsOfSameType))))
+                .Then(factoryMethod.ParameterTypes, Is(AList.InOrder().WithOnlyValues(typeof(string), typeof(string))))
+                .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
+                    APassedConstructorArgDefinition.With().Type(typeof(string)).Index(1),  // role
+                    APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0)  // name
+                )))
+            ;
+        }
+
+        [Test]
         public void CreateThrowsExceptionInCaseNoSuitableConstructorFound()
         {
             FactoryMethodFactory factoryMethodFactory;
@@ -167,5 +200,6 @@ namespace DivineInject.Test
         IDomainObject MethodWithSingleDependency();
         IDomainObject MethodWithDependencyAndArg(string name);
         IDomainObject MethodWithDependencyAndTwoArgs(string name, int timeout);
+        DomainObjectWithConstructorWithTwoArgsOfSameType MethodWithTwoArgsOfSameType(string role, string name);
     }
 }
