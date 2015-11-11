@@ -33,6 +33,26 @@ namespace DivineInject.FactoryGenerator
             return Activator.CreateInstance(myType, propertyValues);
         }
 
+        private static TypeBuilder GetTypeBuilder(Type interfaceType)
+        {
+            var typeSignature = interfaceType.Name + "Factory";
+            var an = new AssemblyName("Divine.Inject.Generated");
+            var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
+            var moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
+            var typeAttributes = TypeAttributes.Public |
+                                 TypeAttributes.Class |
+                                 TypeAttributes.AutoClass |
+                                 TypeAttributes.AnsiClass |
+                                 TypeAttributes.BeforeFieldInit |
+                                 TypeAttributes.AutoLayout;
+            var tb = moduleBuilder.DefineType(
+                typeSignature, 
+                typeAttributes, 
+                null);
+            tb.AddInterfaceImplementation(interfaceType);
+            return tb;
+        }
+
         private Type CompileResultType(ConstructorArgList constructorArgList)
         {
             var factoryClass = m_factoryClassFactory.Create(m_interfaceType, m_injector, m_domainObjectType, constructorArgList);
@@ -43,24 +63,6 @@ namespace DivineInject.FactoryGenerator
                 method.EmitMethod(m_tb, constructorArgList);
 
             return m_tb.CreateType();
-        }
-
-        private static TypeBuilder GetTypeBuilder(Type interfaceType)
-        {
-            var typeSignature = interfaceType.Name + "Factory";
-            var an = new AssemblyName("Divine.Inject.Generated");
-            var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
-            var moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
-            var tb = moduleBuilder.DefineType(typeSignature
-                , TypeAttributes.Public |
-                  TypeAttributes.Class |
-                  TypeAttributes.AutoClass |
-                  TypeAttributes.AnsiClass |
-                  TypeAttributes.BeforeFieldInit |
-                  TypeAttributes.AutoLayout
-                , null);
-            tb.AddInterfaceImplementation(interfaceType);
-            return tb;
         }
     }
 }

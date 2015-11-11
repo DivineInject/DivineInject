@@ -16,13 +16,13 @@ namespace DivineInject.Test.FactoryGenerator
             Scenario()
                 .Given(consArg1 = AMock<IConstructorArgDefinition>().Instance)
                 .Given(method1 = AMock<IFactoryMethod>()
-                    .WhereGet(m => m.ConstructorArgs).Returns(new [] { consArg1 })
+                    .WhereGet(m => m.ConstructorArgs).Returns(new[] { consArg1 })
                     .Instance)
                 .Given(argList = AMock<IConstructorArgList>()
                     .WhereMethod(l => l.Add(consArg1))
                     .Instance)
 
-                .When(new FactoryClass(argList, new[] {method1}))
+                .When(new FactoryClass(argList, new[] { method1 }))
 
                 .Then(ExpectNoMocksFailed());
         }

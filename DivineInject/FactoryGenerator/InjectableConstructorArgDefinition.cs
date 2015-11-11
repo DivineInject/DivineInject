@@ -30,11 +30,12 @@ namespace DivineInject.FactoryGenerator
             getIl.Emit(OpCodes.Ldfld, fieldBuilder);
             getIl.Emit(OpCodes.Ret);
 
+            var methodAttributes = MethodAttributes.Private |
+                                   MethodAttributes.SpecialName |
+                                   MethodAttributes.HideBySig;
             MethodBuilder setPropMthdBldr =
                 tb.DefineMethod("set_" + Name,
-                    MethodAttributes.Private |
-                    MethodAttributes.SpecialName |
-                    MethodAttributes.HideBySig,
+                    methodAttributes,
                     null, new[] { ParameterType });
 
             ILGenerator setIl = setPropMthdBldr.GetILGenerator();

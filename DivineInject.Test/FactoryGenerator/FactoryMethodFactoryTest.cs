@@ -23,7 +23,7 @@ namespace DivineInject.Test.FactoryGenerator
 
             Scenario()
                 .Given(factoryMethodFactory = new FactoryMethodFactory())
-                .Given(methodInfo = typeof (IDummyFactory).GetMethod("MethodWithNoArgs"))
+                .Given(methodInfo = typeof(IDummyFactory).GetMethod("MethodWithNoArgs"))
                 .Given(injector = AMock<IDivineInjector>().Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithDefaultConstructor))
 
@@ -34,8 +34,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .Then(factoryMethod.ReturnType, Is(AType.EqualTo(typeof(IDomainObject))))
                 .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
                 .Then(factoryMethod.ParameterTypes, Is(AList.NoItems<Type>()))
-                .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArgDefinition>()))
-                ;
+                .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArgDefinition>()));
         }
 
         [Test]
@@ -55,7 +54,7 @@ namespace DivineInject.Test.FactoryGenerator
                     .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
                     .Instance)
                 .Given(domainObjectType = typeof(DomainObjectWithSingleArgConstructor))
-                .Given(expectedConstructor = domainObjectType.GetConstructor(new []{typeof(string)}))
+                .Given(expectedConstructor = domainObjectType.GetConstructor(new[] { typeof(string) }))
 
                 .When(factoryMethod = factoryMethodFactory.Create(methodInfo, injector, domainObjectType))
 
@@ -65,9 +64,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithSingleArgConstructor))))
                 .Then(factoryMethod.ParameterTypes, Is(AList.InOrder().WithOnlyValues(typeof(string))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
-                    APassedConstructorArgDefinition.With().Type(typeof(string))
-                    )))
-                ;
+                    APassedConstructorArgDefinition.With().Type(typeof(string)))));
         }
 
         [Test]
@@ -97,9 +94,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithOneDependency))))
                 .Then(factoryMethod.ParameterTypes, Is(AList.NoItems<Type>()))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
-                    AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase))
-                    )))
-                ;
+                    AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)))));
         }
 
         [Test]
@@ -133,9 +128,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)),
                     APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0),
-                    APassedConstructorArgDefinition.With().Type(typeof(int)).Index(1)
-                    )))
-                ;
+                    APassedConstructorArgDefinition.With().Type(typeof(int)).Index(1))));
         }
 
         [Test]
@@ -166,9 +159,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .Then(factoryMethod.ParameterTypes, Is(AList.InOrder().WithOnlyValues(typeof(string), typeof(string))))
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
                     APassedConstructorArgDefinition.With().Type(typeof(string)).Index(1),  // role
-                    APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0)  // name
-                    )))
-                ;
+                    APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0))));  // name
         }
 
         [Test]
@@ -190,8 +181,7 @@ namespace DivineInject.Test.FactoryGenerator
 
                 .When(exception = CaughtException(() => factoryMethodFactory.Create(methodInfo, injector, domainObjectType)))
 
-                .Then(exception, Is(AnException.With().Message("Could not find constructor on DomainObjectWithOneDependency for factory method IDummyFactory.MethodWithSingleDependency")))
-                ;
+                .Then(exception, Is(AnException.With().Message("Could not find constructor on DomainObjectWithOneDependency for factory method IDummyFactory.MethodWithSingleDependency")));
         }
     }
 }

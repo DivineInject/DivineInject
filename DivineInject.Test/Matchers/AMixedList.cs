@@ -36,8 +36,7 @@ namespace DivineInject.Test.Matchers
         }
     }
 
-
-    public class AMixedList<T> : AbstractMatcher<IEnumerable<T>>
+    internal class AMixedList<T> : AbstractMatcher<IEnumerable<T>>
     {
         private readonly IMatcher[] m_matchers;
 

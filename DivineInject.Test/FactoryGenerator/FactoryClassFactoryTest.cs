@@ -49,9 +49,7 @@ namespace DivineInject.Test.FactoryGenerator
 
                 .Then(createdClass.Methods, Is(AList.InOrder().WithOnly(
                     AnInstance.SameAs(method1),
-                    AnInstance.SameAs(method2)
-                    )))
-                ;
+                    AnInstance.SameAs(method2))));
         }
     }
 }

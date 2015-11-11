@@ -9,7 +9,6 @@ namespace DivineInject.FactoryGenerator
     internal class FactoryClass
     {
         private readonly IConstructorArgList m_argList;
-        public IList<IFactoryMethod> Methods { get; private set; }
 
         public FactoryClass(IConstructorArgList argList, IList<IFactoryMethod> methods)
         {
@@ -18,6 +17,8 @@ namespace DivineInject.FactoryGenerator
             foreach (var definition in methods.SelectMany(m => m.ConstructorArgs))
                 argList.Add(definition);
         }
+
+        public IList<IFactoryMethod> Methods { get; private set; }
 
         public void EmitConstructor(TypeBuilder tb)
         {

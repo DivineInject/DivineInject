@@ -20,14 +20,19 @@ namespace DivineInject
                 .OrderBy(c => c.GetParameters().Count())
                 .FirstOrDefault();
             if (cons == null)
-                throw new BindingException(string.Format("Cannot create {0}, could not find an injectable constructor because the following types are not injectable: {1}",
-                    typeof(T).FullName,
-                    string.Join(", ", constructors
+            {
+                var constructorParameters = string.Join(
+                    ", ", 
+                    constructors
                         .SelectMany(c => c.GetParameters())
                         .Where(p => !m_injector.IsBound(p.ParameterType))
-                        .Select(p => p.ParameterType.FullName))));
+                        .Select(p => p.ParameterType.FullName));
+                throw new BindingException(string.Format("Cannot create {0}, could not find an injectable constructor because the following types are not injectable: {1}",
+                    typeof(T).FullName,
+                    constructorParameters));
+            }
             var args = cons.GetParameters().Select(p => m_injector.Get(p.ParameterType)).ToArray();
-            return (T) cons.Invoke(args);
+            return (T)cons.Invoke(args);
         }
     }
 }

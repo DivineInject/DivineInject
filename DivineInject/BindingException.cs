@@ -6,6 +6,7 @@ namespace DivineInject
     {
         public BindingException(string msg)
             : base(msg)
-        { }
+        {
+        }
     }
 }

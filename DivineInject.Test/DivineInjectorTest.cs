@@ -19,8 +19,7 @@ namespace DivineInject.Test
 
                 .When(instance = injector.Get<IDatabaseProvider>())
 
-                .Then(instance, Is(AnInstance.OfType<DatabaseProvider>()))
-            ;
+                .Then(instance, Is(AnInstance.OfType<DatabaseProvider>()));
         }
 
         [Test]
@@ -36,8 +35,7 @@ namespace DivineInject.Test
                 .When(instance1 = injector.Get<IDatabaseProvider>())
                 .When(instance2 = injector.Get<IDatabaseProvider>())
 
-                .Then(instance1, Is(AnInstance.SameAs(instance2)))
-            ;
+                .Then(instance1, Is(AnInstance.SameAs(instance2)));
         }
 
         [Test]
@@ -50,8 +48,7 @@ namespace DivineInject.Test
                 .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .Then(injector.IsBound(typeof(IDatabaseProvider)), IsTrue())
-                .Then(injector.IsBound(typeof(string)), IsFalse())
-            ;
+                .Then(injector.IsBound(typeof(string)), IsFalse());
         }
 
         [Test]
@@ -68,8 +65,7 @@ namespace DivineInject.Test
                 .When(service = injector.Get<IOrderService>())
 
                 .Then(service, Is(AnInstance.NotNull()))
-                .Then(((OrderService) service).DatabaseProvider, Is(AnInstance.NotNull()))
-            ;
+                .Then(((OrderService)service).DatabaseProvider, Is(AnInstance.NotNull()));
         }
 
         [Test]
@@ -88,49 +84,7 @@ namespace DivineInject.Test
                 .When(user = userFactory.Create("Helen"))
 
                 .Then(user.Name, Is(AString.EqualTo("Helen")))
-                .Then(((User)user).DatabaseProvider, Is(AnInstance.NotNull()))
-            ;
-        }
-    }
-
-    public interface IDatabaseProvider
-    { }
-
-    public class DatabaseProvider : IDatabaseProvider
-    { }
-
-    public interface IOrderService
-    { }
-
-    public class OrderService : IOrderService
-    {
-        public IDatabaseProvider DatabaseProvider { get; private set; }
-
-        public OrderService(IDatabaseProvider databaseProvider)
-        {
-            DatabaseProvider = databaseProvider;
-        }
-    }
-
-    public interface IUser
-    {
-        string Name { get; }
-    }
-
-    public class User : IUser
-    {
-        public User(string name, IDatabaseProvider databaseProvider)
-        {
-            Name = name;
-            DatabaseProvider = databaseProvider;
-        }
-
-        public string Name { get; private set; }
-        public IDatabaseProvider DatabaseProvider { get; private set; }
-
-        public interface IFactory
-        {
-            IUser Create(string name);
+                .Then(((User)user).DatabaseProvider, Is(AnInstance.NotNull()));
         }
     }
 }

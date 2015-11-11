@@ -8,13 +8,6 @@ namespace DivineInject.FactoryGenerator
 {
     internal class FactoryMethod : IFactoryMethod
     {
-        public ConstructorInfo Constructor { get; private set; }
-        public string Name { get; private set; }
-        public Type ReturnType { get; private set; }
-        public Type ReturnImplType { get; private set; }
-        public Type[] ParameterTypes { get; private set; }
-        public IList<IConstructorArgDefinition> ConstructorArgs { get; private set; } 
-
         public FactoryMethod(ConstructorInfo constructor, string name,
             Type returnType, Type returnImplType, Type[] parameterTypes, IList<IConstructorArgDefinition> constructorArgs)
         {
@@ -26,18 +19,26 @@ namespace DivineInject.FactoryGenerator
             ConstructorArgs = constructorArgs;
         }
 
+        public ConstructorInfo Constructor { get; private set; }
+        public string Name { get; private set; }
+        public Type ReturnType { get; private set; }
+        public Type ReturnImplType { get; private set; }
+        public Type[] ParameterTypes { get; private set; }
+        public IList<IConstructorArgDefinition> ConstructorArgs { get; private set; }
+
         public void EmitMethod(TypeBuilder tb, IConstructorArgList constructorArgList)
         {
-            var method = tb.DefineMethod(Name,
-                MethodAttributes.Public |
-                MethodAttributes.HideBySig |
-                MethodAttributes.NewSlot |
-                MethodAttributes.Virtual |
-                MethodAttributes.Final,
+            var methodAttributes = MethodAttributes.Public |
+                                   MethodAttributes.HideBySig |
+                                   MethodAttributes.NewSlot |
+                                   MethodAttributes.Virtual |
+                                   MethodAttributes.Final;
+            var method = tb.DefineMethod(
+                Name,
+                methodAttributes,
                 CallingConventions.Standard,
                 ReturnType,
-                ConstructorArgs.OfType<IPassedConstructorArgDefinition>().Select(a => a.ParameterType).ToArray()
-                );
+                ConstructorArgs.OfType<IPassedConstructorArgDefinition>().Select(a => a.ParameterType).ToArray());
 
             var consArgTypes = ConstructorArgs.Select(a => a.ParameterType).ToArray();
 
@@ -60,7 +61,7 @@ namespace DivineInject.FactoryGenerator
                 }
                 else if (arg is IPassedConstructorArgDefinition)
                 {
-                    il.Emit(OpCodes.Ldarg, ((IPassedConstructorArgDefinition) arg).ParameterIndex + 1);
+                    il.Emit(OpCodes.Ldarg, ((IPassedConstructorArgDefinition)arg).ParameterIndex + 1);
                 }
                 else
                 {

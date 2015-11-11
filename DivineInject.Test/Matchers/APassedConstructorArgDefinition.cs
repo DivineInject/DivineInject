@@ -35,7 +35,6 @@ namespace DivineInject.Test.Matchers
         }
 
         public APassedConstructorArgDefinition Index(IMatcher<int?> index)
-
         {
             WithProperty(() => PropertyNames.ParameterIndex, index);
             return this;

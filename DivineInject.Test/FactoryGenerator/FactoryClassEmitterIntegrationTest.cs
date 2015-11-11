@@ -27,8 +27,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .When(factory = (ICreateDomainObjectWithDefaultConstructor)emitter.CreateNewObject())
                 .When(obj = factory.Create())
 
-                .Then(obj, Is(AnInstance.NotNull()))
-                ;
+                .Then(obj, Is(AnInstance.NotNull()));
         }
 
         [Test]
@@ -51,12 +50,11 @@ namespace DivineInject.Test.FactoryGenerator
                     typeof(ICreateDomainObjectWithOneDependency), 
                     typeof(DomainObjectWithOneDependency)))
 
-                .When(factory = (ICreateDomainObjectWithOneDependency) emitter.CreateNewObject())
+                .When(factory = (ICreateDomainObjectWithOneDependency)emitter.CreateNewObject())
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
-                .Then(((DomainObjectWithOneDependency)obj).Database, Is(AnInstance.SameAs(database)))
-                ;
+                .Then(((DomainObjectWithOneDependency)obj).Database, Is(AnInstance.SameAs(database)));
         }
 
         [Test]
@@ -80,8 +78,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .When(obj = factory.Create("bob"))
 
                 .Then(obj, Is(AnInstance.NotNull()))
-                .Then(obj.Name, Is(AString.EqualTo("bob")))
-                ;
+                .Then(obj.Name, Is(AString.EqualTo("bob")));
         }
 
         [Test]
@@ -105,13 +102,12 @@ namespace DivineInject.Test.FactoryGenerator
                     typeof(ICreateDomainObjectWithDependencyAndArg),
                     typeof(DomainObjectWithDependencyAndArg)))
 
-                .When(factory = (ICreateDomainObjectWithDependencyAndArg) emitter.CreateNewObject())
+                .When(factory = (ICreateDomainObjectWithDependencyAndArg)emitter.CreateNewObject())
                 .When(obj = factory.Create("Fred"))
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(((DomainObjectWithDependencyAndArg)obj).Database, Is(AnInstance.SameAs(database)))
-                .Then(obj.Name, Is(AString.EqualTo("Fred")))
-                ;
+                .Then(obj.Name, Is(AString.EqualTo("Fred")));
         }
 
         [Test]
@@ -136,8 +132,7 @@ namespace DivineInject.Test.FactoryGenerator
                 .When(objWithSpecificName = factory.CreateWithName("Bob"))
 
                 .Then(objWithSpecificName.Name, Is(AString.EqualTo("Bob")))
-                .Then(objWithDefaultName.Name, Is(AString.EqualTo("Fred")))
-                ;
+                .Then(objWithDefaultName.Name, Is(AString.EqualTo("Fred")));
         }
 
         [Test]
@@ -162,39 +157,7 @@ namespace DivineInject.Test.FactoryGenerator
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(obj.Name, Is(AString.EqualTo("sarah")))
-                .Then(obj.Role, Is(AString.EqualTo("developer")))
-                ;
+                .Then(obj.Role, Is(AString.EqualTo("developer")));
         }
-    }
-
-    public interface ICreateDomainObjectWithDefaultConstructor
-    {
-        IDomainObject Create();
-    }
-
-    public interface ICreateDomainObjectWithOneDependency
-    {
-        IDomainObject Create();
-    }
-
-    public interface ICreateDomainObjectWithSingleArgConstructor
-    {
-        IDomainObjectWithName Create(string name);
-    }
-
-    public interface ICreateDomainObjectWithDependencyAndArg
-    {
-        IDomainObjectWithName Create(string name);
-    }
-
-    public interface ICreateDomainObjectWithTwoConstructors
-    {
-        IDomainObjectWithName CreateWithDefaultName();
-        IDomainObjectWithName CreateWithName(string name);
-    }
-
-    public interface ICreateDomainObjectWithConstructorWithTwoArgsOfSameType
-    {
-        DomainObjectWithConstructorWithTwoArgsOfSameType Create(string role, string name);
     }
 }

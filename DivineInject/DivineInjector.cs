@@ -24,7 +24,7 @@ namespace DivineInject
         bool IsBound(Type type);
     }
 
-    class DivineInjector : IDivineInjector
+    public class DivineInjector : IDivineInjector
     {
         private readonly Instantiator m_instantiator;
         private readonly IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
@@ -46,7 +46,7 @@ namespace DivineInject
 
         public T Get<T>()
         {
-            return (T) Get(typeof(T));
+            return (T)Get(typeof(T));
         }
 
         public object Get(Type type)
