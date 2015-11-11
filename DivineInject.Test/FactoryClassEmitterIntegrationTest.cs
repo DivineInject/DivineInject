@@ -14,7 +14,7 @@ namespace DivineInject.Test
             FactoryClassEmitter emitter;
             ICreateDomainObjectWithDefaultConstructor factory;
             IDivineInjector injector;
-            DomainObjectWithDefaultConstructor obj;
+            IDomainObject obj;
 
             Scenario()
                 .Given(injector = AMock<IDivineInjector>().Instance)
@@ -37,7 +37,7 @@ namespace DivineInject.Test
             ICreateDomainObjectWithOneDependency factory;
             IDivineInjector injector;
             IDatabase database;
-            DomainObjectWithOneDependency obj;
+            IDomainObject obj;
 
             Scenario()
                 .Given(database = AMock<IDatabase>().Instance)
@@ -54,7 +54,7 @@ namespace DivineInject.Test
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
-                .Then(obj.Database, Is(AnInstance.SameAs(database)))
+                .Then(((DomainObjectWithOneDependency)obj).Database, Is(AnInstance.SameAs(database)))
             ;
         }
 
@@ -64,7 +64,7 @@ namespace DivineInject.Test
             FactoryClassEmitter emitter;
             ICreateDomainObjectWithSingleArgConstructor factory;
             IDivineInjector injector;
-            DomainObjectWithSingleArgConstructor obj;
+            IDomainObjectWithName obj;
 
             Scenario()
                 .Given(injector = AMock<IDivineInjector>()
@@ -90,7 +90,7 @@ namespace DivineInject.Test
             ICreateDomainObjectWithDependencyAndArg factory;
             IDivineInjector injector;
             IDatabase database;
-            DomainObjectWithDependencyAndArg obj;
+            IDomainObjectWithName obj;
 
             Scenario()
                 .Given(database = AMock<IDatabase>().Instance)
@@ -108,7 +108,7 @@ namespace DivineInject.Test
                 .When(obj = factory.Create("Fred"))
 
                 .Then(obj, Is(AnInstance.NotNull()))
-                .Then(obj.Database, Is(AnInstance.SameAs(database)))
+                .Then(((DomainObjectWithDependencyAndArg)obj).Database, Is(AnInstance.SameAs(database)))
                 .Then(obj.Name, Is(AString.EqualTo("Fred")))
             ;
         }
@@ -119,7 +119,7 @@ namespace DivineInject.Test
             FactoryClassEmitter emitter;
             ICreateDomainObjectWithTwoConstructors factory;
             IDivineInjector injector;
-            DomainObjectWithTwoConstructors objWithDefaultName, objWithSpecificName;
+            IDomainObjectWithName objWithDefaultName, objWithSpecificName;
 
             Scenario()
                 .Given(injector = AMock<IDivineInjector>()
@@ -142,27 +142,27 @@ namespace DivineInject.Test
 
     public interface ICreateDomainObjectWithDefaultConstructor
     {
-        DomainObjectWithDefaultConstructor Create();
+        IDomainObject Create();
     }
 
     public interface ICreateDomainObjectWithOneDependency
     {
-        DomainObjectWithOneDependency Create();
+        IDomainObject Create();
     }
 
     public interface ICreateDomainObjectWithSingleArgConstructor
     {
-        DomainObjectWithSingleArgConstructor Create(string name);
+        IDomainObjectWithName Create(string name);
     }
 
     public interface ICreateDomainObjectWithDependencyAndArg
     {
-        DomainObjectWithDependencyAndArg Create(string name);
+        IDomainObjectWithName Create(string name);
     }
 
     public interface ICreateDomainObjectWithTwoConstructors
     {
-        DomainObjectWithTwoConstructors CreateWithDefaultName();
-        DomainObjectWithTwoConstructors CreateWithName(string name);
+        IDomainObjectWithName CreateWithDefaultName();
+        IDomainObjectWithName CreateWithName(string name);
     }
 }
