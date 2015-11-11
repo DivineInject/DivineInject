@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Reflection;
+using DivineInject.FactoryGenerator;
 using DivineInject.Test.DummyModel;
+using DivineInject.Test.Matchers;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class FactoryMethodFactoryTest : AbstractNUnitMoqScenarioTest
@@ -33,7 +35,7 @@ namespace DivineInject.Test
                 .Then(factoryMethod.ReturnImplType, Is(AType.EqualTo(typeof(DomainObjectWithDefaultConstructor))))
                 .Then(factoryMethod.ParameterTypes, Is(AList.NoItems<Type>()))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.NoItems<IConstructorArgDefinition>()))
-            ;
+                ;
         }
 
         [Test]
@@ -64,8 +66,8 @@ namespace DivineInject.Test
                 .Then(factoryMethod.ParameterTypes, Is(AList.InOrder().WithOnlyValues(typeof(string))))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(
                     APassedConstructorArgDefinition.With().Type(typeof(string))
-                )))
-            ;
+                    )))
+                ;
         }
 
         [Test]
@@ -96,8 +98,8 @@ namespace DivineInject.Test
                 .Then(factoryMethod.ParameterTypes, Is(AList.NoItems<Type>()))
                 .Then(factoryMethod.ConstructorArgs, Is(AList.InOrder().WithOnly(  
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase))
-                )))
-            ;
+                    )))
+                ;
         }
 
         [Test]
@@ -132,8 +134,8 @@ namespace DivineInject.Test
                     AnInjectableConstructorArgDefinition.With().Name("Database").PropertyType(typeof(IDatabase)),
                     APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0),
                     APassedConstructorArgDefinition.With().Type(typeof(int)).Index(1)
-                )))
-            ;
+                    )))
+                ;
         }
 
         [Test]
@@ -165,8 +167,8 @@ namespace DivineInject.Test
                 .Then(factoryMethod.ConstructorArgs, Is(AMixedList.Of<IConstructorArgDefinition>().With(
                     APassedConstructorArgDefinition.With().Type(typeof(string)).Index(1),  // role
                     APassedConstructorArgDefinition.With().Type(typeof(string)).Index(0)  // name
-                )))
-            ;
+                    )))
+                ;
         }
 
         [Test]
@@ -189,17 +191,7 @@ namespace DivineInject.Test
                 .When(exception = CaughtException(() => factoryMethodFactory.Create(methodInfo, injector, domainObjectType)))
 
                 .Then(exception, Is(AnException.With().Message("Could not find constructor on DomainObjectWithOneDependency for factory method IDummyFactory.MethodWithSingleDependency")))
-            ;
+                ;
         }
-    }
-
-    internal interface IDummyFactory
-    {
-        IDomainObject MethodWithNoArgs();
-        IDomainObject MethodWithSinglePassedArg(string name);
-        IDomainObject MethodWithSingleDependency();
-        IDomainObject MethodWithDependencyAndArg(string name);
-        IDomainObject MethodWithDependencyAndTwoArgs(string name, int timeout);
-        DomainObjectWithConstructorWithTwoArgsOfSameType MethodWithTwoArgsOfSameType(string role, string name);
     }
 }

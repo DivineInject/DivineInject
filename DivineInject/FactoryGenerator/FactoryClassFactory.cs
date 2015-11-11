@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Linq;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
     internal class FactoryClassFactory
     {

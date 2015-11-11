@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TestFirst.Net;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.Matchers
 {
-    public static class AMixedList
+    internal static class AMixedList
     {
         public static Builder<T> Of<T>()
         {
@@ -35,6 +35,7 @@ namespace DivineInject.Test
             }
         }
     }
+
 
     public class AMixedList<T> : AbstractMatcher<IEnumerable<T>>
     {

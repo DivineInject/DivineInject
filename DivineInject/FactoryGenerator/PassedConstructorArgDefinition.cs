@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IPassedConstructorArgDefinition : IConstructorArgDefinition
-    {
-        int ParameterIndex { get; }
-    }
-
     internal class PassedConstructorArgDefinition : IPassedConstructorArgDefinition
     {
         public PassedConstructorArgDefinition(Type parameterType, int parameterIndex)

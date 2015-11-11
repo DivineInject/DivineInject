@@ -1,8 +1,9 @@
 ﻿using System;
+using DivineInject.FactoryGenerator;
 using TestFirst.Net;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.Matchers
 {
     internal class APassedConstructorArgDefinition : PropertyMatcher<PassedConstructorArgDefinition>
     {

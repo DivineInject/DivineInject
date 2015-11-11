@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
     internal class FactoryClassEmitter 
     {

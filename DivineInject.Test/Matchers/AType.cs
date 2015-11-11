@@ -1,7 +1,7 @@
 using System;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.Matchers
 {
     public class AType : PropertyMatcher<Type>
     {

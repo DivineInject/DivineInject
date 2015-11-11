@@ -1,9 +1,10 @@
-﻿using DivineInject.Test.DummyModel;
+using DivineInject.FactoryGenerator;
+using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class FactoryClassEmitterIntegrationTest : AbstractNUnitMoqScenarioTest
@@ -27,7 +28,7 @@ namespace DivineInject.Test
                 .When(obj = factory.Create())
 
                 .Then(obj, Is(AnInstance.NotNull()))
-            ;
+                ;
         }
 
         [Test]
@@ -55,7 +56,7 @@ namespace DivineInject.Test
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(((DomainObjectWithOneDependency)obj).Database, Is(AnInstance.SameAs(database)))
-            ;
+                ;
         }
 
         [Test]
@@ -80,7 +81,7 @@ namespace DivineInject.Test
 
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(obj.Name, Is(AString.EqualTo("bob")))
-            ;
+                ;
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace DivineInject.Test
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(((DomainObjectWithDependencyAndArg)obj).Database, Is(AnInstance.SameAs(database)))
                 .Then(obj.Name, Is(AString.EqualTo("Fred")))
-            ;
+                ;
         }
 
         [Test]
@@ -136,7 +137,7 @@ namespace DivineInject.Test
 
                 .Then(objWithSpecificName.Name, Is(AString.EqualTo("Bob")))
                 .Then(objWithDefaultName.Name, Is(AString.EqualTo("Fred")))
-            ;
+                ;
         }
 
         [Test]
@@ -162,7 +163,7 @@ namespace DivineInject.Test
                 .Then(obj, Is(AnInstance.NotNull()))
                 .Then(obj.Name, Is(AString.EqualTo("sarah")))
                 .Then(obj.Role, Is(AString.EqualTo("developer")))
-            ;
+                ;
         }
     }
 

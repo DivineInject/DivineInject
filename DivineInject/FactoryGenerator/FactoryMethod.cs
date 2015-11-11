@@ -1,22 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IFactoryMethod
-    {
-        ConstructorInfo Constructor { get; }
-        string Name { get; }
-        Type ReturnType { get; }
-        Type ReturnImplType { get; }
-        Type[] ParameterTypes { get; }
-        IList<IConstructorArgDefinition> ConstructorArgs { get; }
-        void EmitMethod(TypeBuilder tb, IConstructorArgList constructorArgList);
-    }
-
     internal class FactoryMethod : IFactoryMethod
     {
         public ConstructorInfo Constructor { get; private set; }

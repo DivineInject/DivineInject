@@ -52,12 +52,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AMethodInfo.cs" />
-    <Compile Include="AMixedList.cs" />
-    <Compile Include="AnInjectableConstructorArgDefinition.cs" />
-    <Compile Include="APassedConstructorArgDefinition.cs" />
-    <Compile Include="AType.cs" />
-    <Compile Include="ConstructorArgListTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
     <Compile Include="DummyModel\DomainObjectWithConstructorWithTwoArgsOfSameType.cs" />
     <Compile Include="DummyModel\DomainObjectWithDefaultConstructor.cs" />
@@ -69,12 +63,20 @@
     <Compile Include="DummyModel\IDatabase.cs" />
     <Compile Include="DummyModel\IDomainObject.cs" />
     <Compile Include="DummyModel\IDomainObjectWithName.cs" />
-    <Compile Include="FactoryClassEmitterIntegrationTest.cs" />
-    <Compile Include="FactoryClassFactoryTest.cs" />
-    <Compile Include="FactoryClassTest.cs" />
-    <Compile Include="FactoryMethodFactoryTest.cs" />
-    <Compile Include="InjectableConstructorArgDefinitionTest.cs" />
+    <Compile Include="FactoryGenerator\ConstructorArgListTest.cs" />
+    <Compile Include="FactoryGenerator\FactoryClassEmitterIntegrationTest.cs" />
+    <Compile Include="FactoryGenerator\FactoryClassFactoryTest.cs" />
+    <Compile Include="FactoryGenerator\FactoryClassTest.cs" />
+    <Compile Include="FactoryGenerator\FactoryMethodFactoryTest.cs" />
+    <Compile Include="FactoryGenerator\IDummyFactory.cs" />
+    <Compile Include="FactoryGenerator\IFactoryInterfaceWithTwoMethods.cs" />
+    <Compile Include="FactoryGenerator\InjectableConstructorArgDefinitionTest.cs" />
     <Compile Include="InstantiatorTest.cs" />
+    <Compile Include="Matchers\AMethodInfo.cs" />
+    <Compile Include="Matchers\AMixedList.cs" />
+    <Compile Include="Matchers\AnInjectableConstructorArgDefinition.cs" />
+    <Compile Include="Matchers\APassedConstructorArgDefinition.cs" />
+    <Compile Include="Matchers\AType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +91,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

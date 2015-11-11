@@ -1,17 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IInjectableConstructorArgDefinition : IConstructorArgDefinition
-    {
-        string Name { get; }
-    }
-
-    public class InjectableConstructorArgDefinition : IInjectableConstructorArgDefinition
+    internal class InjectableConstructorArgDefinition : IInjectableConstructorArgDefinition
     {
         public InjectableConstructorArgDefinition(Type parameterType, string name)
         {

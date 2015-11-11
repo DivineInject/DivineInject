@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection.Emit;
+using DivineInject.FactoryGenerator;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class ConstructorArgListTest : AbstractNUnitMoqScenarioTest

@@ -1,17 +1,9 @@
 using System;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IInjectableConstructorArg : IConstructorArg
-    {
-        Type PropertyType { get; }
-        string Name { get; }
-        MethodBuilder Getter { get; }
-        MethodBuilder Setter { get; }
-    }
-
-    public class InjectableConstructorArg : IInjectableConstructorArg
+    internal class InjectableConstructorArg : IInjectableConstructorArg
     {
         public Type PropertyType { get; private set; }
         public string Name { get; private set; }

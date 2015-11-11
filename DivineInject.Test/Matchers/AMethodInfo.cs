@@ -2,9 +2,9 @@ using System.Reflection;
 using TestFirst.Net;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.Matchers
 {
-    public class AMethodInfo : PropertyMatcher<MethodInfo>
+    internal class AMethodInfo : PropertyMatcher<MethodInfo>
     {
         private static readonly MethodInfo PropertyNames = null;
 

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace DivineInject
 {
     internal class Instantiator
     {
-        private IDivineInjector m_injector;
+        private readonly IDivineInjector m_injector;
 
         public Instantiator(IDivineInjector injector)
         {

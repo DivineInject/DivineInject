@@ -1,14 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IFactoryMethodFactory
-    {
-        IFactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType);
-    }
-
     internal class FactoryMethodFactory : IFactoryMethodFactory
     {
         public IFactoryMethod Create(MethodInfo method, IDivineInjector injector, Type domainObjectType)

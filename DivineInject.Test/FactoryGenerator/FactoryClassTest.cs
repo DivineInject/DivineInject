@@ -1,7 +1,8 @@
-﻿using NUnit.Framework;
+﻿using DivineInject.FactoryGenerator;
+using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class FactoryClassTest : AbstractNUnitMoqScenarioTest

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IConstructorArgList
+    internal interface IConstructorArgList
     {
         void Add(IConstructorArgDefinition defn);
         IList<IConstructorArg> Arguments { get; }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    public interface IConstructorArgDefinition
+    internal interface IConstructorArgDefinition
     {
         Type ParameterType { get; }
 

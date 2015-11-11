@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Collections.Generic;
+using DivineInject.FactoryGenerator;
 using DivineInject.Test.DummyModel;
+using DivineInject.Test.Matchers;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class FactoryClassFactoryTest : AbstractNUnitMoqScenarioTest
@@ -33,12 +34,12 @@ namespace DivineInject.Test
                         ArgIs(AMethodInfo.With().Name("MethodWithDependencyOnly")), 
                         injector,
                         typeof(DomainObjectWithDependencyAndArg)))
-                        .Returns(method1)
+                    .Returns(method1)
                     .WhereMethod(f => f.Create(
                         ArgIs(AMethodInfo.With().Name("MethodWithDependencyAndArg")),
                         injector,
                         typeof(DomainObjectWithDependencyAndArg)))
-                        .Returns(method2)
+                    .Returns(method2)
                     .Instance)
                 .Given(classFactory = new FactoryClassFactory(methodFactory))
 
@@ -49,14 +50,8 @@ namespace DivineInject.Test
                 .Then(createdClass.Methods, Is(AList.InOrder().WithOnly(
                     AnInstance.SameAs(method1),
                     AnInstance.SameAs(method2)
-                )))
-            ;
+                    )))
+                ;
         }
-    }
-
-    internal interface IFactoryInterfaceWithTwoMethods
-    {
-        DomainObjectWithDependencyAndArg MethodWithDependencyOnly();
-        DomainObjectWithDependencyAndArg MethodWithDependencyAndArg(string name);
     }
 }

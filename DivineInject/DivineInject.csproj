@@ -40,22 +40,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingException.cs" />
-    <Compile Include="ConstructorArgList.cs" />
-    <Compile Include="IConstructorArg.cs" />
-    <Compile Include="IConstructorArgList.cs" />
-    <Compile Include="LegacyConstructorArg.cs" />
+    <Compile Include="FactoryGenerator\ConstructorArgList.cs" />
+    <Compile Include="FactoryGenerator\FactoryClass.cs" />
+    <Compile Include="FactoryGenerator\FactoryClassEmitter.cs" />
+    <Compile Include="FactoryGenerator\FactoryClassFactory.cs" />
+    <Compile Include="FactoryGenerator\FactoryMethod.cs" />
+    <Compile Include="FactoryGenerator\FactoryMethodFactory.cs" />
+    <Compile Include="FactoryGenerator\IConstructorArg.cs" />
+    <Compile Include="FactoryGenerator\IConstructorArgDefinition.cs" />
+    <Compile Include="FactoryGenerator\IConstructorArgList.cs" />
+    <Compile Include="FactoryGenerator\IFactoryMethod.cs" />
+    <Compile Include="FactoryGenerator\IFactoryMethodFactory.cs" />
+    <Compile Include="FactoryGenerator\IInjectableConstructorArg.cs" />
+    <Compile Include="FactoryGenerator\IInjectableConstructorArgDefinition.cs" />
+    <Compile Include="FactoryGenerator\InjectableConstructorArg.cs" />
+    <Compile Include="FactoryGenerator\InjectableConstructorArgDefinition.cs" />
+    <Compile Include="FactoryGenerator\IPassedConstructorArgDefinition.cs" />
+    <Compile Include="FactoryGenerator\PassedConstructorArg.cs" />
+    <Compile Include="FactoryGenerator\PassedConstructorArgDefinition.cs" />
     <Compile Include="DivineInjector.cs" />
-    <Compile Include="FactoryClass.cs" />
-    <Compile Include="FactoryClassEmitter.cs" />
-    <Compile Include="FactoryClassFactory.cs" />
-    <Compile Include="FactoryMethod.cs" />
-    <Compile Include="FactoryMethodFactory.cs" />
-    <Compile Include="IConstructorArgDefinition.cs" />
-    <Compile Include="InjectableConstructorArg.cs" />
-    <Compile Include="InjectableConstructorArgDefinition.cs" />
     <Compile Include="Instantiator.cs" />
-    <Compile Include="PassedConstructorArg.cs" />
-    <Compile Include="PassedConstructorArgDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

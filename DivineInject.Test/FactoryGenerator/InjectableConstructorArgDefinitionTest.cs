@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using DivineInject.FactoryGenerator;
 using DivineInject.Test.DummyModel;
 using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
-namespace DivineInject.Test
+namespace DivineInject.Test.FactoryGenerator
 {
     [TestFixture]
     public class InjectableConstructorArgDefinitionTest : AbstractNUnitMoqScenarioTest

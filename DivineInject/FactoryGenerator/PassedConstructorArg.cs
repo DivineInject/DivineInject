@@ -1,14 +1,8 @@
 ﻿using System;
 
-namespace DivineInject
+namespace DivineInject.FactoryGenerator
 {
-    internal interface IPassedConstructorArg : IConstructorArg
-    {
-        Type ParameterType { get; }
-        int ParameterIndex { get; }
-    }
-
-    internal class PassedConstructorArg : IPassedConstructorArg
+    internal class PassedConstructorArg : IConstructorArg
     {
         public PassedConstructorArg(Type parameterType, int parameterIndex)
         {
