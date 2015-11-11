@@ -138,6 +138,33 @@ namespace DivineInject.Test
                 .Then(objWithDefaultName.Name, Is(AString.EqualTo("Fred")))
             ;
         }
+
+        [Test]
+        [Ignore("wip")]
+        public void CreatesFactoryForDomainObjectWithConstructorWithTwoArgsOfSameType()
+        {
+            FactoryClassEmitter emitter;
+            ICreateDomainObjectWithConstructorWithTwoArgsOfSameType factory;
+            IDivineInjector injector;
+            DomainObjectWithConstructorWithTwoArgsOfSameType obj;
+
+            Scenario()
+                .Given(injector = AMock<IDivineInjector>()
+                    .WhereMethod(i => i.IsBound(typeof(string))).Returns(false)
+                    .Instance)
+                .Given(emitter = new FactoryClassEmitter(
+                    injector,
+                    typeof(ICreateDomainObjectWithConstructorWithTwoArgsOfSameType),
+                    typeof(DomainObjectWithConstructorWithTwoArgsOfSameType)))
+
+                .When(factory = (ICreateDomainObjectWithConstructorWithTwoArgsOfSameType)emitter.CreateNewObject())
+                .When(obj = factory.Create("developer", "sarah"))
+
+                .Then(obj, Is(AnInstance.NotNull()))
+                .Then(obj.Name, Is(AString.EqualTo("sarah")))
+                .Then(obj.Role, Is(AString.EqualTo("developer")))
+            ;
+        }
     }
 
     public interface ICreateDomainObjectWithDefaultConstructor
@@ -164,5 +191,10 @@ namespace DivineInject.Test
     {
         IDomainObjectWithName CreateWithDefaultName();
         IDomainObjectWithName CreateWithName(string name);
+    }
+
+    public interface ICreateDomainObjectWithConstructorWithTwoArgsOfSameType
+    {
+        DomainObjectWithConstructorWithTwoArgsOfSameType Create(string role, string name);
     }
 }

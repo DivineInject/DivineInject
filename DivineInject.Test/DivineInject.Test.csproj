@@ -60,6 +60,7 @@
     <Compile Include="ClassGeneratorTest.cs" />
     <Compile Include="ConstructorArgListTest.cs" />
     <Compile Include="DivineInjectorTest.cs" />
+    <Compile Include="DummyModel\DomainObjectWithConstructorWithTwoArgsOfSameType.cs" />
     <Compile Include="DummyModel\DomainObjectWithDefaultConstructor.cs" />
     <Compile Include="DummyModel\DomainObjectWithDependencyAndArg.cs" />
     <Compile Include="DummyModel\DomainObjectWithDependencyAndTwoArgs.cs" />
