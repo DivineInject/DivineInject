@@ -9,6 +9,28 @@ namespace DivineInject.Test
     public class FactoryClassEmitterIntegrationTest : AbstractNUnitMoqScenarioTest
     {
         [Test]
+        public void CreatesFactoryForDomainObjectWithDefaultConstructor()
+        {
+            FactoryClassEmitter emitter;
+            ICreateDomainObjectWithDefaultConstructor factory;
+            IDivineInjector injector;
+            DomainObjectWithDefaultConstructor obj;
+
+            Scenario()
+                .Given(injector = AMock<IDivineInjector>().Instance)
+                .Given(emitter = new FactoryClassEmitter(
+                    injector,
+                    typeof(ICreateDomainObjectWithDefaultConstructor),
+                    typeof(DomainObjectWithDefaultConstructor)))
+
+                .When(factory = (ICreateDomainObjectWithDefaultConstructor)emitter.CreateNewObject())
+                .When(obj = factory.Create())
+
+                .Then(obj, Is(AnInstance.NotNull()))
+            ;
+        }
+
+        [Test]
         public void CreatesFactoryForDomainObjectWithInjectedDependency()
         {
             FactoryClassEmitter emitter;
@@ -90,6 +112,11 @@ namespace DivineInject.Test
                 .Then(obj.Name, Is(AString.EqualTo("Fred")))
             ;
         }
+    }
+
+    public interface ICreateDomainObjectWithDefaultConstructor
+    {
+        DomainObjectWithDefaultConstructor Create();
     }
 
     public interface ICreateDomainObjectWithOneDependency
