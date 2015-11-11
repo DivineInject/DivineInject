@@ -1,6 +1,6 @@
 ﻿namespace DivineInject.Test.DummyModel
 {
-    public class DomainObjectWithTwoConstructors
+    public class DomainObjectWithTwoConstructors : IDomainObjectWithName
     {
         public DomainObjectWithTwoConstructors()
         {

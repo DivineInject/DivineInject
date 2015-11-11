@@ -68,6 +68,7 @@
     <Compile Include="DummyModel\DomainObjectWithTwoConstructors.cs" />
     <Compile Include="DummyModel\IDatabase.cs" />
     <Compile Include="DummyModel\IDomainObject.cs" />
+    <Compile Include="DummyModel\IDomainObjectWithName.cs" />
     <Compile Include="FactoryClassEmitterIntegrationTest.cs" />
     <Compile Include="FactoryClassFactoryTest.cs" />
     <Compile Include="FactoryClassTest.cs" />

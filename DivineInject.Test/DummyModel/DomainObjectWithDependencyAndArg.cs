@@ -1,9 +1,9 @@
 ﻿namespace DivineInject.Test.DummyModel
 {
-    public class DomainObjectWithDependencyAndArg : IDomainObject
+    public class DomainObjectWithDependencyAndArg : IDomainObjectWithName
     {
-        public IDatabase Database { get; set; }
-        public string Name { get; set; }
+        public IDatabase Database { get; private set; }
+        public string Name { get; private set; }
 
         public DomainObjectWithDependencyAndArg(IDatabase database, string name)
         {
