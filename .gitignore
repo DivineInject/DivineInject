@@ -6,3 +6,4 @@ Release
 packages
 *.user
 StyleCop.Cache
+TestResult.xml

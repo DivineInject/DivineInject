@@ -1,0 +1,4 @@
+#!/bin/sh
+
+nuget install MSBuildTasks -Verbosity quiet -Version 1.4.0.128
+msbuild.exe /target:Build /verbosity:minimal msbuild.xml

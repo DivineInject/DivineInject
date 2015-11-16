@@ -1,0 +1,40 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask AssemblyFile="$(MSBuildStartupDirectory)\packages\MSBuildTasks.1.4.0.128\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
+  <PropertyGroup>
+    <WorkingFolder>$(MSBuildProjectDirectory)</WorkingFolder>
+    <Configuration>Release</Configuration>
+	<Platform>Any CPU</Platform>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Solution Include="DivineInject.sln">
+	  <Properties>
+	    Configuration=$(Configuration);
+		Platform=$(Platform)
+	  </Properties>
+	</Solution>
+  </ItemGroup>
+
+  <Target Name="Build" DependsOnTargets="Settings;CompileSolution;RunTests" />  
+
+  <Target Name="Settings">
+	<Message Importance="High" Text="     Configuration: $(Configuration)"/>
+	<Message Importance="High" Text="          Platform: $(Platform)"/>
+	<Message Importance="High" Text="  "/>
+  </Target>
+  
+  <Target Name="CompileSolution">
+    <MSBuild Projects="@(Solution)"/>
+  </Target>
+
+  <Target Name="RunTests">
+    <Exec Command="nuget install NUnit.Runners -Version 2.6.2 -Verbosity quiet"/>
+    <CreateItem Include="**\bin\**\$(Configuration)\*.Test.dll">
+      <Output TaskParameter="Include" ItemName="TestAssembly" />
+    </CreateItem>
+    <NUnit Assemblies="@(TestAssembly)"
+           ToolPath="packages\NUnit.Runners.2.6.2\tools"
+    />
+  </Target>
+  
+</Project>	
