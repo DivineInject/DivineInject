@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DivineInject</id>
+    <version>0.0.2</version>
+    <authors>David Green</authors>
+    <owners>David Green</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/DivineInject/DivineInject</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.net dependency injection</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (c) 2015 DivineInject</copyright>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
