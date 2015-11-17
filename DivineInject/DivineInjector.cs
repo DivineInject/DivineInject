@@ -26,12 +26,18 @@ namespace DivineInject
 
     public class DivineInjector : IDivineInjector
     {
+        private static readonly IDivineInjector CurrentInstance = new DivineInjector();
         private readonly Instantiator m_instantiator;
         private readonly IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
 
         public DivineInjector()
         {
             m_instantiator = new Instantiator(this);
+        }
+
+        public static IDivineInjector Current
+        {
+            get { return CurrentInstance; }
         }
 
         public IBindingBuilder Bind<T>()
