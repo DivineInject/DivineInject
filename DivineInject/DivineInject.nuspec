@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DivineInject</id>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <authors>David Green</authors>
     <owners>David Green</owners>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
