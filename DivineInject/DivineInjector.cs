@@ -19,6 +19,7 @@ namespace DivineInject
     public interface IDivineInjector
     {
         IBindingBuilder Bind<T>();
+        IBindingFactoryBuilder BindFactory<T>();
         T Get<T>();
         object Get(Type type);
         bool IsBound(Type type);
