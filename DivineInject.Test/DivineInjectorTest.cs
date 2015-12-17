@@ -10,12 +10,12 @@ namespace DivineInject.Test
         [Test]
         public void BindsInterfaceToImplementationAndInstantiates()
         {
-            DivineInjector injector;
+            IDivineInjector injector;
             IDatabaseProvider instance;
 
             Scenario()
-                .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .When(instance = injector.Get<IDatabaseProvider>())
 
@@ -25,12 +25,12 @@ namespace DivineInject.Test
         [Test]
         public void MultipleRequestsForSameInterfaceYieldSameObject()
         {
-            DivineInjector injector;
+            IDivineInjector injector;
             IDatabaseProvider instance1, instance2;
 
             Scenario()
-                .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .When(instance1 = injector.Get<IDatabaseProvider>())
                 .When(instance2 = injector.Get<IDatabaseProvider>())
@@ -41,11 +41,11 @@ namespace DivineInject.Test
         [Test]
         public void IsBoundReturnsWhetherABindingExistsForAType()
         {
-            DivineInjector injector;
+            IDivineInjector injector;
 
             Scenario()
-                .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .Then(injector.IsBound(typeof(IDatabaseProvider)), IsTrue())
                 .Then(injector.IsBound(typeof(string)), IsFalse());
@@ -54,13 +54,13 @@ namespace DivineInject.Test
         [Test]
         public void BindsAndInstantiatesDependenciesWithDependencies()
         {
-            DivineInjector injector;
+            IDivineInjector injector;
             IOrderService service;
 
             Scenario()
-                .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
-                .Given(() => injector.Bind<IOrderService>().To<OrderService>())
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>()
+                    .Bind<IOrderService>().To<OrderService>())
 
                 .When(service = injector.Get<IOrderService>())
 
@@ -71,14 +71,14 @@ namespace DivineInject.Test
         [Test]
         public void BindsAndInstantiatesDependencyViaFactoryInterface()
         {
-            DivineInjector injector;
+            IDivineInjector injector;
             User.IFactory userFactory;
             IUser user;
 
             Scenario()
-                .Given(injector = new DivineInjector())
-                .Given(() => injector.Bind<IDatabaseProvider>().To<DatabaseProvider>())
-                .Given(() => injector.BindFactory<User.IFactory>().For<User>())
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>()
+                    .BindFactory<User.IFactory>().For<User>())
 
                 .When(userFactory = injector.Get<User.IFactory>())
                 .When(user = userFactory.Create("Helen"))
