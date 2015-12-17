@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
-using TestFirst.Net.Extensions.NUnit;
+using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
 namespace DivineInject.Test
 {
     [TestFixture]
-    public class DivineInjectorTest : AbstractNUnitScenarioTest
+    public class DivineInjectorTest : AbstractNUnitMoqScenarioTest
     {
         [Test]
         public void BindsInterfaceToImplementationAndInstantiates()
@@ -14,7 +14,7 @@ namespace DivineInject.Test
             IDatabaseProvider instance;
 
             Scenario()
-                .Given(injector = DivineInjector.Current
+                .Given(injector = DivineInjector.Create()
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .When(instance = injector.Get<IDatabaseProvider>())
@@ -29,7 +29,7 @@ namespace DivineInject.Test
             IDatabaseProvider instance1, instance2;
 
             Scenario()
-                .Given(injector = DivineInjector.Current
+                .Given(injector = DivineInjector.Create()
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .When(instance1 = injector.Get<IDatabaseProvider>())
@@ -44,7 +44,7 @@ namespace DivineInject.Test
             IDivineInjector injector;
 
             Scenario()
-                .Given(injector = DivineInjector.Current
+                .Given(injector = DivineInjector.Create()
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>())
 
                 .Then(injector.IsBound(typeof(IDatabaseProvider)), IsTrue())
@@ -58,7 +58,7 @@ namespace DivineInject.Test
             IOrderService service;
 
             Scenario()
-                .Given(injector = DivineInjector.Current
+                .Given(injector = DivineInjector.Create()
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>()
                     .Bind<IOrderService>().To<OrderService>())
 
@@ -76,7 +76,7 @@ namespace DivineInject.Test
             IUser user;
 
             Scenario()
-                .Given(injector = DivineInjector.Current
+                .Given(injector = DivineInjector.Create()
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>()
                     .Bind<User.IFactory>().AsGeneratedFactoryFor<User>())
 
@@ -85,6 +85,23 @@ namespace DivineInject.Test
 
                 .Then(user.Name, Is(AString.EqualTo("Helen")))
                 .Then(((User)user).DatabaseProvider, Is(AnInstance.NotNull()));
+        }
+
+        [Test]
+        public void BindsInterfaceToMockInstance()
+        {
+            IDivineInjector injector;
+            IDatabaseProvider instance;
+            IDatabaseProvider mockedDatabaseProvider;
+
+            Scenario()
+                .Given(mockedDatabaseProvider = AMock<IDatabaseProvider>().Instance)
+                .Given(injector = DivineInjector.Create()
+                    .Bind<IDatabaseProvider>().To(mockedDatabaseProvider))
+
+                .When(instance = injector.Get<IDatabaseProvider>())
+
+                .Then(instance, Is(AnInstance.SameAs(mockedDatabaseProvider)));
         }
     }
 }

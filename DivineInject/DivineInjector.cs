@@ -9,6 +9,9 @@ namespace DivineInject
         IDivineInjector To<TImpl>()
             where TImpl : class;
 
+        IDivineInjector To<TImpl>(TImpl instance)
+            where TImpl : class;
+
         IDivineInjector AsGeneratedFactoryFor<TImpl>()
             where TImpl : class;
     }
@@ -27,7 +30,7 @@ namespace DivineInject
         private readonly Instantiator m_instantiator;
         private readonly IDictionary<Type, object> m_bindings = new Dictionary<Type, object>();
 
-        public DivineInjector()
+        private DivineInjector()
         {
             m_instantiator = new Instantiator(this);
         }
@@ -35,6 +38,11 @@ namespace DivineInject
         public static IDivineInjector Current
         {
             get { return CurrentInstance; }
+        }
+
+        public static IDivineInjector Create()
+        {
+            return new DivineInjector();
         }
 
         public IBindingBuilder Bind<T>()
@@ -67,6 +75,12 @@ namespace DivineInject
             m_bindings.Add(typeof(TInterface), impl);
         }
 
+        private void AddBinding<TInterface, TImpl>(TImpl instance)
+            where TImpl : class
+        {
+            m_bindings.Add(typeof(TInterface), instance);
+        }
+
         private void AddFactoryBinding<TInterface, TImpl>()
             where TImpl : class
         {
@@ -88,6 +102,12 @@ namespace DivineInject
                 where TImpl : class
             {
                 m_injector.AddBinding<TInterface, TImpl>();
+                return m_injector;
+            }
+
+            public IDivineInjector To<TImpl>(TImpl instance) where TImpl : class
+            {
+                m_injector.AddBinding<TInterface, TImpl>(instance);
                 return m_injector;
             }
 
