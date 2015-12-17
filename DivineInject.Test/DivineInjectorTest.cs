@@ -78,7 +78,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(injector = DivineInjector.Current
                     .Bind<IDatabaseProvider>().To<DatabaseProvider>()
-                    .BindFactory<User.IFactory>().For<User>())
+                    .Bind<User.IFactory>().AsGeneratedFactoryFor<User>())
 
                 .When(userFactory = injector.Get<User.IFactory>())
                 .When(user = userFactory.Create("Helen"))

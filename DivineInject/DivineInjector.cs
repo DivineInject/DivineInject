@@ -8,18 +8,14 @@ namespace DivineInject
     {
         IDivineInjector To<TImpl>()
             where TImpl : class;
-    }
 
-    public interface IBindingFactoryBuilder
-    {
-        IDivineInjector For<TImpl>()
+        IDivineInjector AsGeneratedFactoryFor<TImpl>()
             where TImpl : class;
     }
 
     public interface IDivineInjector
     {
         IBindingBuilder Bind<T>();
-        IBindingFactoryBuilder BindFactory<T>();
         T Get<T>();
         object Get(Type type);
         bool IsBound(Type type);
@@ -44,11 +40,6 @@ namespace DivineInject
         public IBindingBuilder Bind<T>()
         {
             return new BindingBuilder<T>(this);
-        }
-
-        public IBindingFactoryBuilder BindFactory<T>()
-        {
-            return new BindingFactoryBuilder<T>(this);
         }
 
         public T Get<T>()
@@ -99,19 +90,8 @@ namespace DivineInject
                 m_injector.AddBinding<TInterface, TImpl>();
                 return m_injector;
             }
-        }
 
-        private class BindingFactoryBuilder<TInterface> : IBindingFactoryBuilder
-        {
-            private readonly DivineInjector m_injector;
-
-            internal BindingFactoryBuilder(DivineInjector injector)
-            {
-                m_injector = injector;
-            }
-
-            public IDivineInjector For<TImpl>() 
-                where TImpl : class
+            public IDivineInjector AsGeneratedFactoryFor<TImpl>() where TImpl : class
             {
                 m_injector.AddFactoryBinding<TInterface, TImpl>();
                 return m_injector;
