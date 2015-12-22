@@ -110,7 +110,7 @@ namespace DivineInject
             public IDivineInjector To<TImpl>()
                 where TImpl : class
             {
-                return To(typeof (TImpl));
+                return To(typeof(TImpl));
             }
 
             public IDivineInjector To(Type implType)

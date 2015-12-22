@@ -15,7 +15,7 @@ namespace DivineInject
         public T Create<T>()
             where T : class
         {
-            return (T) Create(typeof (T));
+            return (T)Create(typeof(T));
         }
 
         public object Create(Type type)
