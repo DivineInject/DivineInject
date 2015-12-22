@@ -22,6 +22,7 @@ namespace DivineInject
         T Get<T>();
         object Get(Type type);
         bool IsBound(Type type);
+        void Reset();
     }
 
     public class DivineInjector : IDivineInjector
@@ -38,11 +39,6 @@ namespace DivineInject
         public static IDivineInjector Current
         {
             get { return CurrentInstance; }
-        }
-
-        public static IDivineInjector Create()
-        {
-            return new DivineInjector();
         }
 
         public IBindingBuilder Bind<T>()
@@ -66,6 +62,11 @@ namespace DivineInject
         public bool IsBound(Type type)
         {
             return m_bindings.ContainsKey(type);
+        }
+
+        public void Reset()
+        {
+            m_bindings.Clear();
         }
 
         private void AddBinding<TInterface, TImpl>()
