@@ -63,7 +63,7 @@ namespace DivineInject
         {
             object impl;
             if (!m_bindings.TryGetValue(type, out impl))
-                return Activator.CreateInstance(type);
+                return m_instantiator.Create(type);
             return impl;
         }
 

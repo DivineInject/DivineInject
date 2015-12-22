@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using TestFirst.Net.Extensions.Moq;
 using TestFirst.Net.Matcher;
 
@@ -123,6 +124,37 @@ namespace DivineInject.Test
                 .When(instance = injector.Get<IDatabaseProvider>())
 
                 .Then(instance, Is(AnInstance.SameAs(mockedDatabaseProvider)));
+        }
+
+        [Test]
+        public void AutoBindsAClassThatCanBeConstructedFromDependencies()
+        {
+            IDivineInjector injector;
+            IOrderService service;
+
+            Scenario()
+                .Given(injector = DivineInjector.Current
+                    .Bind<IDatabaseProvider>().To<DatabaseProvider>())
+
+                .When(service = injector.Get<OrderService>())
+
+                .Then(service, Is(AnInstance.NotNull()))
+                .Then(((OrderService)service).DatabaseProvider, Is(AnInstance.NotNull()));
+        }
+
+        [Test]
+        public void WhenAnUnboundClassCannotBeInstantiatedThrowsUsefulException()
+        {
+            IDivineInjector injector;
+            Exception exception;
+
+            Scenario()
+                .Given(injector = DivineInjector.Current)
+
+                .When(exception = CaughtException(() => injector.Get<OrderService>()))
+
+                .Then(exception, Is(AnException.With()
+                    .Message(AString.Containing("Cannot create DivineInject.Test.OrderService, could not find an injectable constructor because the following types are not injectable: DivineInject.Test.IDatabaseProvider"))));
         }
     }
 }
