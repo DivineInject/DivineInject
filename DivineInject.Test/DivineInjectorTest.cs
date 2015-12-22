@@ -29,6 +29,21 @@ namespace DivineInject.Test
         }
 
         [Test]
+        public void BindsUsingTypeArgumentToImplementationAndInstantiates()
+        {
+            IDivineInjector injector;
+            IDatabaseProvider instance;
+
+            Scenario()
+                .Given(injector = DivineInjector.Current
+                    .Bind(typeof(IDatabaseProvider)).To(typeof(DatabaseProvider)))
+
+                .When(instance = injector.Get<IDatabaseProvider>())
+
+                .Then(instance, Is(AnInstance.OfType<DatabaseProvider>()));
+        }
+
+        [Test]
         public void MultipleRequestsForSameInterfaceYieldSameObject()
         {
             IDivineInjector injector;
@@ -103,7 +118,7 @@ namespace DivineInject.Test
             Scenario()
                 .Given(mockedDatabaseProvider = AMock<IDatabaseProvider>().Instance)
                 .Given(injector = DivineInjector.Current
-                    .Bind<IDatabaseProvider>().To(mockedDatabaseProvider))
+                    .Bind<IDatabaseProvider>().ToInstance(mockedDatabaseProvider))
 
                 .When(instance = injector.Get<IDatabaseProvider>())
 

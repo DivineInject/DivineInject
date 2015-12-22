@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace DivineInject
 {
@@ -14,7 +15,12 @@ namespace DivineInject
         public T Create<T>()
             where T : class
         {
-            var constructors = typeof(T).GetConstructors();
+            return (T) Create(typeof (T));
+        }
+
+        public object Create(Type type)
+        {
+            var constructors = type.GetConstructors();
             var cons = constructors
                 .Where(c => c.GetParameters().All(p => m_injector.IsBound(p.ParameterType)))
                 .OrderBy(c => c.GetParameters().Count())
@@ -28,11 +34,11 @@ namespace DivineInject
                         .Where(p => !m_injector.IsBound(p.ParameterType))
                         .Select(p => p.ParameterType.FullName));
                 throw new BindingException(string.Format("Cannot create {0}, could not find an injectable constructor because the following types are not injectable: {1}",
-                    typeof(T).FullName,
+                    type.FullName,
                     constructorParameters));
             }
             var args = cons.GetParameters().Select(p => m_injector.Get(p.ParameterType)).ToArray();
-            return (T)cons.Invoke(args);
+            return cons.Invoke(args);
         }
     }
 }

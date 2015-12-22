@@ -9,7 +9,9 @@ namespace DivineInject
         IDivineInjector To<TImpl>()
             where TImpl : class;
 
-        IDivineInjector To<TImpl>(TImpl instance)
+        IDivineInjector To(Type implType);
+
+        IDivineInjector ToInstance<TImpl>(TImpl instance)
             where TImpl : class;
 
         IDivineInjector AsGeneratedFactoryFor<TImpl>()
@@ -19,6 +21,7 @@ namespace DivineInject
     public interface IDivineInjector
     {
         IBindingBuilder Bind<T>();
+        IBindingBuilder Bind(Type type);
         T Get<T>();
         object Get(Type type);
         bool IsBound(Type type);
@@ -43,7 +46,12 @@ namespace DivineInject
 
         public IBindingBuilder Bind<T>()
         {
-            return new BindingBuilder<T>(this);
+            return new BindingBuilder(this, typeof(T));
+        }
+
+        public IBindingBuilder Bind(Type type)
+        {
+            return new BindingBuilder(this, type);
         }
 
         public T Get<T>()
@@ -69,52 +77,58 @@ namespace DivineInject
             m_bindings.Clear();
         }
 
-        private void AddBinding<TInterface, TImpl>()
-            where TImpl : class
+        private void AddBinding(Type interfaceType, Type implType)
         {
-            var impl = m_instantiator.Create<TImpl>();
-            m_bindings.Add(typeof(TInterface), impl);
+            var impl = m_instantiator.Create(implType);
+            m_bindings.Add(interfaceType, impl);
         }
 
-        private void AddBinding<TInterface, TImpl>(TImpl instance)
+        private void AddBinding<TImpl>(Type interfaceType, TImpl instance)
             where TImpl : class
         {
-            m_bindings.Add(typeof(TInterface), instance);
+            m_bindings.Add(interfaceType, instance);
         }
 
-        private void AddFactoryBinding<TInterface, TImpl>()
-            where TImpl : class
+        private void AddFactoryBinding(Type interfaceType, Type implType)
         {
-            var emitter = new FactoryClassEmitter(this, typeof(TInterface), typeof(TImpl));
+            var emitter = new FactoryClassEmitter(this, interfaceType, implType);
             var factory = emitter.CreateNewObject();
-            m_bindings.Add(typeof(TInterface), factory);
+            m_bindings.Add(interfaceType, factory);
         }
 
-        private class BindingBuilder<TInterface> : IBindingBuilder
+        private class BindingBuilder : IBindingBuilder
         {
             private readonly DivineInjector m_injector;
+            private readonly Type m_interfaceType;
 
-            internal BindingBuilder(DivineInjector injector)
+            internal BindingBuilder(DivineInjector injector, Type interfaceType)
             {
                 m_injector = injector;
+                m_interfaceType = interfaceType;
             }
 
             public IDivineInjector To<TImpl>()
                 where TImpl : class
             {
-                m_injector.AddBinding<TInterface, TImpl>();
+                return To(typeof (TImpl));
+            }
+
+            public IDivineInjector To(Type implType)
+            {
+                m_injector.AddBinding(m_interfaceType, implType);
                 return m_injector;
             }
 
-            public IDivineInjector To<TImpl>(TImpl instance) where TImpl : class
+            public IDivineInjector ToInstance<TImpl>(TImpl instance)
+                where TImpl : class
             {
-                m_injector.AddBinding<TInterface, TImpl>(instance);
+                m_injector.AddBinding(m_interfaceType, instance);
                 return m_injector;
             }
 
             public IDivineInjector AsGeneratedFactoryFor<TImpl>() where TImpl : class
             {
-                m_injector.AddFactoryBinding<TInterface, TImpl>();
+                m_injector.AddFactoryBinding(m_interfaceType, typeof(TImpl));
                 return m_injector;
             }
         }
