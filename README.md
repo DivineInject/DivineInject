@@ -9,7 +9,7 @@ DivineInject is opinionated about the right way to use dependency injection:
 
 * Constructor injection or death
 
-  No, setter injection is bad for your health, just say no
+  Setter injection is bad for your health, just say no
 
 * Dependencies are singletons
 
@@ -19,20 +19,31 @@ DivineInject is opinionated about the right way to use dependency injection:
 
   Your domain model doesn't have to be [anemic](https://en.wikipedia.org/wiki/Anemic_domain_model)
   
-### Constructor Injection
+## Getting Started
 
-Setter and method injection are much harder to get right - so DivineInject simply doesn't support them. If you can't implement your dependencies as 
-constructor arguments, then maybe you should refactor the dependency so you can.
+First, install the nuget package:
 
-### Singleton Dependencies
+```
+Install-Package DivineInject
+```
 
-All dependency injection frameworks get wrapped up in different scopes. These are almost always confusing and open to abuse - so DivineInject
-simply doesn't support them. With DivineInject all dependencies must be singletons. If you need a user- or session- or thread-specific dependency,
-then implement the dependency provider in your own code. It's not hard to write, but it's a lot easier to debug when the code is under your control.
+Second, wire up your dependencies:
 
-### Rich Domain Objects
+```
+DivineInjector.Current
+	.Bind<IDatabaseProvider>().To<MSSQLDatabaseProvider>()
+	.Bind<IOrderService>().To<OrderService>();
+```
+  
+Third, create your root object:
 
-DivineInject borrows an idea from [Google Guice](https://github.com/google/guice) - with Guice it is called "assisted injection", in
-DivineInject we call it generated factory injection. The idea is the same - providing a simple way to create objects with constructors
-which accept runtime arguments as well as dependencies to inject. This allows you to create rich, stateful domain objects which also have
-dependencies.
+```
+public object GetInstance(InstanceContext instanceContext, Message message)
+{
+    return DivineInjector.Current.Get(m_instanceType);
+}
+```
+  
+## Documentation
+
+For more documentation and detailed examples, see the [documentation](http://divineinject.github.io/).
